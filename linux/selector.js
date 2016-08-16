@@ -258,7 +258,7 @@ function getAllEngineVersions() {
             }
             engines[info.version] = info;
         }
-    });
+    });    
     // AppData 中的引擎不能覆盖默认安装，确保用户能够用新安装覆盖原来有问题的引擎
     engines[egret.version] = egret;
     if (configData) {
@@ -267,7 +267,12 @@ function getAllEngineVersions() {
                 continue;
             }
             var rootInConfig = file.escapePath(configData.egret[v].root);
-            var bin = getBin(rootInConfig);	    
+
+	    var selector = process['mainModule'].filename;
+	    var root = file.escapePath(file.joinPath(Path.dirname(selector), '../packages/'));
+	    rootInConfig = root + rootInConfig;
+
+            var bin = getBin(rootInConfig);
             var exist = file.exists(bin);
             if (exist) {
                 var info = getEngineVersion(rootInConfig);
