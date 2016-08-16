@@ -1,7 +1,7 @@
 {
 	"egret":{
 		"3.1.4":{
-			"root":"/Volumes/EOSX/develop/other/egret/egret-core-3.1.4/"
+			"root":"../../packages/egret-core-3.1.4"
 		}
 	}
 }
