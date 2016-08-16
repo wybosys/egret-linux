@@ -1,0 +1,124 @@
+<keys>
+  <item key="Alert.Confirm" value="确定"/>
+  <item key="Alert.Cancel" value="取消"/>
+  <item key="Alert.Yes" value="是"/>
+  <item key="Alert.No" value="否"/>
+  <item key="Main.Engine" value="引擎"/>
+  <item key="Main.Tools" value="工具"/>
+  <item key="Main.Resource" value="资源"/>
+  <item key="Engine.CheckCE" value="使用社区体验版"/>
+  <item key="Engine.VersionInfo" value="当前使用 {0} 版本创建项目"/>
+  <item key="Engine.Path" value="位置:"/>
+  <item key="Engine.Getting" value="正在获取...."/>
+  <item key="Engine.ResetEngine" value="重置引擎"/>
+  <item key="Engine.CheckUpdate" value="检查更新"/>
+  <item key="Engine.UpdateLog" value="更新日志"/>
+  <item key="Engine.IntallOtherVersion" value="安装其他版本"/>
+  <item key="Engine.ChooseEgretPath" value="选择Egret所在目录"/>
+  <item key="Engine.InstalledVersions" value="已安装版本"/>
+  <item key="Engine.RepairComplete" value="修复完成"/>
+  <item key="Engine.RepairFailed" value="修复失败"/>
+  <item key="Engine.Repairing" value="正在修复"/>
+  <item key="Engine.Repair" value="Egret Engine修复"/>
+  <item key="Engine.ClearNPM" value="清除npm缓存"/>
+  <item key="Engine.ClearNPM.Detail" value="修复重复安装导致的冲突问题"/>
+  <item key="Engine.SettingEnvVar" value="设置环境变量"/>
+  <item key="Engine.SettingEnvVar.Detail" value="修复找不到egret命令的问题"/>
+  <item key="Engine.ResetPath" value="重置egret位置"/>
+  <item key="Engine.ResetPath.Detail" value="还原egret位置为默认值"/>
+  <item key="Engine.ChoiceEngine.Default" value="默认"/>
+  <item key="Engine.ChoiceEngine.Version" value="版本号"/>
+  <item key="Engine.ChoiceEngine.Path" value="路径"/>
+  <item key="Engine.ChoiceEngine.Operation" value="操作"/>
+  <item key="Engine.ChoiceEngine.Open" value="打开引擎位置"/>
+  <item key="Engine.ChoiceEngine.Change" value="更改引擎位置"/>
+  <item key="Engine.ChoiceEngine.Delete" value="删除"/>
+  <item key="Engine.ChoiceEngine.Reset" value="重置引擎位置"/>
+  <item key="Engine.Install.DragTip" value="1.请{0}点击此链接{1}下载所需版本的ZIP文件\n\n2.将解压后的文件夹拖拽到此区域进行安装"/>
+  <item key="Engine.Install.IntallConfirm" value="是否安装版本 {0}"/>
+  <item key="Engine.Install.IntallSuccess" value="版本 {0} 安装成功"/>
+  <item key="Engine.Install.IntallError" value="不支持此文件的安装，请确认此文件夹是否是有效的egret文件夹"/>
+  <item key="Application.Detail" value="详细信息"/>
+  <item key="Application.Installed" value="已装"/>
+  <item key="Application.Installed2" value="已安装"/>
+  <item key="Application.NotInstall" value="未安装"/>
+  <item key="Application.Newest" value="最新"/>
+  <item key="Application.Unknow" value="未知"/>
+  <item key="Application.Update" value="更新"/>
+  <item key="Application.Open" value="打开"/>
+  <item key="Application.OpenFolder" value="打开目录"/>
+  <item key="Application.Download" value="下载"/>
+  <item key="Application.Install" value="安装"/>
+  <item key="Application.Waiting" value="正在等待..."/>
+  <item key="Document.Website" value="官方网站"/>
+  <item key="Document.DocSenter" value="文档中心"/>
+  <item key="Document.EgretBBS" value="Egret论坛"/>
+  <item key="Document.Example" value="示例项目"/>
+  <item key="Document.Library" value="第三方库"/>
+  <item key="Common.Confirm" value="确定"/>
+  <item key="Common.Cancel" value="取消"/>
+  <item key="Common.Complete" value="完成"/>
+  <item key="Common.Refresh" value="刷新"/>
+  <item key="Common.Back" value="返回"/>
+  <item key="ColorWindow.Title" value="颜色选择器"/>
+  <item key="ColorWindow.SelectColor" value="选择颜色:"/>
+  <item key="ColorWindow.NewColor" value="新的:"/>
+  <item key="ColorWindow.CurrentColor" value="当前:"/>
+  <item key="ColorWindow.UseDefault" value="使用默认值"/>
+  <item key="ColorWindow.Restore" value="还原 "/>
+  <item key="CloseTabButtonSkin.CloseButton.ToolTip" value="关闭"/>
+  <item key="AlertWindowSkin.ButtonOne" value="是"/>
+  <item key="AlertWindowSkin.ButtonTwo" value="否"/>
+  <item key="AlertWindowSkin.ButtonThree" value="取消"/>
+  <item key="TabGroup.MenuButton" value="选项卡菜单"/>
+  <item key="FileUtil.Browse" value="浏览文件"/>
+  <item key="FileUtil.Save" value="保存文件"/>
+  <item key="StatuBar.EditArea" value="编辑区"/>
+  <item key="StatuBar.Restore" value="复原"/>
+  <item key="TabGroup.Close" value="关闭"/>
+  <item key="TabGroup.Minimum" value="最小化"/>
+  <item key="TabGroup.CloseTab" value="关闭选项卡组"/>
+  <item key="CloseTabButton.Close" value="关闭"/>
+  <item key="CloseTabButton.CloseOther" value="关闭其他"/>
+  <item key="CloseTabButton.CloseAll" value="关闭全部"/>
+  <item key="LoginWindow.Title" value="登录"/>
+  <item key="LoginWindow.Email" value="Egret ID:"/>
+  <item key="LoginWindow.Passwrod" value="密码:"/>
+  <item key="LoginWindow.Login" value="登录"/>
+  <item key="LoginWindow.Register" value="注册"/>
+  <item key="LoginWindow.Loading" value="登录中..."/>
+  <item key="LoginWindow.ErrorNoUser" value="用户不存在"/>
+  <item key="LoginWindow.ErrorPassword" value="密码错误"/>
+  <item key="LoginWindow.ErrorLogin" value="登录失败"/>
+  <item key="LoginWindow.ErrorEmail" value="请使用论坛账号对应的邮箱登录"/>
+  <item key="LoginWindow.ErrorBadNet" value="网络连接错误"/>
+  <item key="LoginWindow.CloseContent" value="关闭本窗体将会关闭Egret Wing，是否继续？"/>
+  <item key="LoginWindow.CloseTitle" value="关闭提示"/>
+  <item key="LoginWindow.AlertErrorTitle" value="登录提示"/>
+  <item key="LoginWindow.AlertLoading" value="正在尝试登录..."/>
+  <item key="LoginWindow.AlertErrorContent" value="您的账号已在其他地点登录，如非本人操作，请修改密码。\n\n关闭本窗体将关闭Egret Wing。"/>
+  <item key="LoginWindow.ReLogin" value="重新登录"/>
+  <item key="LoginWindow.ChangePassword" value="修改密码"/>
+  <item key="LoginWindow.RemeberPassword" value="记住密码"/>
+  <item key="LoginWindow.FindPassword" value="找回密码"/>
+  <item key="LoginWindow.NoQualification" value="该账号没有内测资格"/>
+  <item key="LoginWindow.PromptApplyContent" value="您的账号尚未获得内测资格，暂时无法试用。"/>
+  <item key="LoginWindow.PromptApplyTitle" value="登录提示"/>
+  <item key="LoginWindow.EgretIDPrompt" value="您登陆论坛对应的邮箱"/>
+  <item key="LoginWindow.Apply" value="申请内测"/>
+  <item key="AboutWindow.Title" value="关于 {0}"/>
+  <item key="AboutWindow.Version" value="版本：{0}"/>
+  <item key="AboutWindow.TechGroup" value="技术支持"/>
+  <item key="AboutWindow.ContactGroup" value="联系我们"/>
+  <item key="AboutWindow.BusinessGroup" value="业务合作"/>
+  <item key="AboutWindow.PromiseGroup" value="Egret 服务承诺"/>
+  <item key="AboutWindow.BBS" value="BBS交流区：{0}"/>
+  <item key="AboutWindow.SupportMail" value="技术支持邮箱：{0}"/>
+  <item key="AboutWindow.DeveloperQQ" value="Egret 开发者群：{0}"/>
+  <item key="AboutWindow.Telephone" value="电话：{0}"/>
+  <item key="AboutWindow.Website" value="网址：{0}"/>
+  <item key="AboutWindow.Address" value="地址：{0}"/>
+  <item key="AboutWindow.BusinessMail" value="商务合作：{0}"/>
+  <item key="AboutWindow.ProductQQ" value="产品合作 QQ：{0}"/>
+  <item key="AboutWindow.ChannelQQ" value="渠道合作 QQ：{0}"/>
+</keys>

@@ -1,0 +1,124 @@
+<keys>
+  <item key="Alert.Confirm" value="OK"/>
+  <item key="Alert.Cancel" value="Cancel"/>
+  <item key="Alert.Yes" value="Yes"/>
+  <item key="Alert.No" value="No"/>
+  <item key="Main.Engine" value="Engine"/>
+  <item key="Main.Tools" value="Tools"/>
+  <item key="Main.Resource" value="Resource"/>
+  <item key="Engine.CheckCE" value="Check for CE Version Updates"/>
+  <item key="Engine.VersionInfo" value="Use Egret Engine {0} to create project."/>
+  <item key="Engine.Path" value="Path:"/>
+  <item key="Engine.Getting" value="Getting...."/>
+  <item key="Engine.Change" value="Change"/>
+  <item key="Engine.ResetEngine" value="Reset Engine"/>
+  <item key="Engine.CheckUpdate" value="Check for Updates"/>
+  <item key="Engine.UpdateLog" value="Update Log"/>
+  <item key="Engine.IntallOtherVersion" value="Install Others"/>
+  <item key="Engine.ChooseEgretPath" value="Select the path of Egret"/>
+  <item key="Engine.InstalledVersions" value="Intalled Engines"/>
+  <item key="Engine.RepairComplete" value="Repair Complete."/>
+  <item key="Engine.RepairFailed" value="Repair Failed"/>
+  <item key="Engine.Repairing" value="Repairing"/>
+  <item key="Engine.Repair" value="Repair Items"/>
+  <item key="Engine.ClearNPM" value="Clear the Cathe of npm "/>
+  <item key="Engine.ClearNPM.Detail" value="Repair the collision problems caused by repeated installations."/>
+  <item key="Engine.SettingEnvVar" value="set environment variables."/>
+  <item key="Engine.SettingEnvVar.Detail" value="Repair the problem that Egret commands cannot be found"/>
+  <item key="Engine.ResetPath" value="Reset the Path of Egret"/>
+  <item key="Engine.ResetPath.Detail" value="Reset the path of Egret to default value."/>
+  <item key="Engine.ChoiceEngine.Default" value="Default"/>
+  <item key="Engine.ChoiceEngine.Version" value="Version"/>
+  <item key="Engine.ChoiceEngine.Path" value="Path"/>
+  <item key="Engine.ChoiceEngine.Operation" value="Operation"/>
+  <item key="Engine.ChoiceEngine.Open" value="Open"/>
+  <item key="Engine.ChoiceEngine.Change" value="Change"/>
+  <item key="Engine.ChoiceEngine.Delete" value="Delete"/>
+  <item key="Engine.ChoiceEngine.Reset" value="Reset"/>
+  <item key="Engine.Install.DragTip" value="1. Please download the ZIP file based on the version of your Egret Engine at {0}Here{1} . \n\n2. Unzip the file and drag it to this area for installation."/>
+  <item key="Engine.Install.IntallConfirm" value="Whether install the version of {0}"/>
+  <item key="Engine.Install.IntallSuccess" value="The version of {0} installed successfully"/>
+  <item key="Engine.Install.IntallError" value="The file can not be installed. Please double check whether it is a valid egret file"/>
+  <item key="Application.Detail" value="Details"/>
+  <item key="Application.Installed" value="Installed"/>
+  <item key="Application.Installed2" value="Installed"/>
+  <item key="Application.NotInstall" value="Non-installed"/>
+  <item key="Application.Newest" value="Newest"/>
+  <item key="Application.Unknow" value="Unknown"/>
+  <item key="Application.Update" value="Update"/>
+  <item key="Application.Open" value="Open"/>
+  <item key="Application.OpenFolder" value="Open Folder"/>
+  <item key="Application.Download" value="Download"/>
+  <item key="Application.Install" value="Install"/>
+  <item key="Application.Waiting" value="Waiting..."/>
+  <item key="Document.Website" value="Official Website"/>
+  <item key="Document.DocSenter" value="Document Center"/>
+  <item key="Document.EgretBBS" value="Egret BBS"/>
+  <item key="Document.Example" value="Sample Projects"/>
+  <item key="Document.Library" value="3rd-party Library"/>
+  <item key="Common.Confirm" value="OK"/>
+  <item key="Common.Cancel" value="Cancel"/>
+  <item key="Common.Complete" value="Complete"/>
+  <item key="Common.Refresh" value="Refresh"/>
+  <item key="Common.Back" value="Back"/>
+  <item key="ColorWindow.Title" value="Color Selector"/>
+  <item key="ColorWindow.SelectColor" value="Select Color:"/>
+  <item key="ColorWindow.NewColor" value="New:"/>
+  <item key="ColorWindow.CurrentColor" value="Current:"/>
+  <item key="ColorWindow.UseDefault" value="Default Value"/>
+  <item key="CloseTabButtonSkin.CloseButton.ToolTip" value="Close"/>
+  <item key="AlertWindowSkin.ButtonOne" value="Yes"/>
+  <item key="AlertWindowSkin.ButtonTwo" value="No"/>
+  <item key="AlertWindowSkin.ButtonThree" value="Cancel"/>
+  <item key="TabGroup.MenuButton" value="Tab Group"/>
+  <item key="FileUtil.Browse" value="Browse Files"/>
+  <item key="FileUtil.Save" value="Save Files"/>
+  <item key="StatuBar.EditArea" value="Edit Area"/>
+  <item key="StatuBar.Restore" value="Restore"/>
+  <item key="TabGroup.Close" value="Close"/>
+  <item key="TabGroup.Minimum" value="Minimum"/>
+  <item key="TabGroup.CloseTab" value="Close Tab Group"/>
+  <item key="CloseTabButton.Close" value="Close"/>
+  <item key="CloseTabButton.CloseOther" value="Close Others"/>
+  <item key="CloseTabButton.CloseAll" value="Close All"/>
+  <item key="LoginWindow.Title" value="Log in"/>
+  <item key="LoginWindow.Email" value="Egret ID:"/>
+  <item key="LoginWindow.Passwrod" value="Password:"/>
+  <item key="LoginWindow.Login" value="Log in"/>
+  <item key="LoginWindow.Register" value="Register"/>
+  <item key="LoginWindow.Loading" value="Logging in..."/>
+  <item key="LoginWindow.ErrorNoUser" value="User does not exist"/>
+  <item key="LoginWindow.ErrorPassword" value="Wrong password"/>
+  <item key="LoginWindow.ErrorLogin" value="Login failed"/>
+  <item key="LoginWindow.ErrorEmail" value="Please log in with the email address your BBS account is using."/>
+  <item key="LoginWindow.ErrorBadNet" value="Network connection error"/>
+  <item key="LoginWindow.CloseContent" value="Egret Wing will close if this window is closed.Still close the window"/>
+  <item key="LoginWindow.CloseTitle" value="Close Tips"/>
+  <item key="LoginWindow.AlertErrorTitle" value="Login Tips"/>
+  <item key="LoginWindow.AlertLoading" value="Trying to log in..."/>
+  <item key="LoginWindow.AlertErrorContent" value="Your account has be logged in. Please change your password if it is not your action. \n\n Egret Wing will close if this window is closed."/>
+  <item key="LoginWindow.ReLogin" value="Relogin"/>
+  <item key="LoginWindow.ChangePassword" value="Reset password"/>
+  <item key="LoginWindow.RemeberPassword" value="Remember password"/>
+  <item key="LoginWindow.FindPassword" value="Retrieve password"/>
+  <item key="LoginWindow.NoQualification" value="This account is not qualified for an internal test version"/>
+  <item key="LoginWindow.PromptApplyContent" value="Your account is not qualified for an internal test version."/>
+  <item key="LoginWindow.PromptApplyTitle" value="Login Tips"/>
+  <item key="LoginWindow.EgretIDPrompt" value="Your Email"/>
+  <item key="LoginWindow.Apply" value="Apply for internal test version"/>
+  <item key="AboutWindow.Title" value="About {0}"/>
+  <item key="AboutWindow.Version" value="Version: {0}"/>
+  <item key="AboutWindow.TechGroup" value="Technical Support"/>
+  <item key="AboutWindow.ContactGroup" value="Contact us"/>
+  <item key="AboutWindow.BusinessGroup" value="Business Cooperation"/>
+  <item key="AboutWindow.PromiseGroup" value="Egret's Promise"/>
+  <item key="AboutWindow.BBS" value="BBS: {0}"/>
+  <item key="AboutWindow.SupportMail" value="Email: {0}"/>
+  <item key="AboutWindow.DeveloperQQ" value="Egret QQ Group: {0}"/>
+  <item key="AboutWindow.Telephone" value="Tel: {0}"/>
+  <item key="AboutWindow.Website" value="Website: {0}"/>
+  <item key="AboutWindow.Address" value="Addr.: {0}"/>
+  <item key="AboutWindow.BusinessMail" value="Email: {0}"/>
+  <item key="AboutWindow.ProductQQ" value="Product Cooperation QQ：{0}"/>
+  <item key="AboutWindow.ChannelQQ" value="Channel Cooperation QQ：{0}"/>
+</keys>
