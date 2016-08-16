@@ -227,8 +227,9 @@ function getAppDataEnginesRootPath() {
             var appdata = process.env.AppData || process.env.USERPROFILE + "/AppData/Roaming/";
             path = file.escapePath(appdata + "/Egret/engine/");
             break;
-        case 'linux':
-            path = "../Library/Egret";
+    case 'linux':
+	var selector = process['mainModule'].filename;
+	path = file.escapePath(file.joinPath(Path.dirname(selector), './engine/'));
             break;
         default:
             ;
@@ -266,7 +267,7 @@ function getAllEngineVersions() {
                 continue;
             }
             var rootInConfig = file.escapePath(configData.egret[v].root);
-            var bin = getBin(rootInConfig);
+            var bin = getBin(rootInConfig);	    
             var exist = file.exists(bin);
             if (exist) {
                 var info = getEngineVersion(rootInConfig);
