@@ -216,7 +216,7 @@ function getEngineInfoInInstaller() {
 }
 function getAppDataEnginesRootPath() {
     var path;
-    switch (process.platform) {
+    switch ('linux') {
         case 'darwin':
             var home = process.env.HOME || ("/Users/" + (process.env.NAME || process.env.LOGNAME));
             if (!home)
@@ -227,9 +227,9 @@ function getAppDataEnginesRootPath() {
             var appdata = process.env.AppData || process.env.USERPROFILE + "/AppData/Roaming/";
             path = file.escapePath(appdata + "/Egret/engine/");
             break;
-    case 'linux':
-	var selector = process['mainModule'].filename;
-	path = file.escapePath(file.joinPath(Path.dirname(selector), './engine/'));
+        case 'linux':
+	        var selector = process['mainModule'].filename;
+	        path = file.escapePath(file.joinPath(Path.dirname(selector), './engine/'));
             break;
         default:
             ;
