@@ -138,8 +138,8 @@ var EgretProjectData = (function () {
         if (!p) {
             var engineVersion = m.version || this.egretProperties.engineVersion;
             if (engineVersion) {
-                var versions = exports.launcher.getEgretToolsInstalledByVersion(engineVersion);
-                return _path.join(versions, 'build', m.name);
+                //var versions = exports.launcher.getEgretToolsInstalledByVersion(engineVersion);
+                //return _path.join(versions, 'build', m.name);
             }
             return _path.join(egret.root, 'build', m.name);
         }
