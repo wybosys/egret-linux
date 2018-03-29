@@ -357,5 +357,5 @@ function getEgretLauncherPath() {
     var launcherPath = file.joinPath(file.read(npmEgretPath), "../");
     return launcherPath;
 }
-exports.launcher = new EgretLauncherProxy();
+//exports.launcher = new EgretLauncherProxy();
 exports.projectData = new EgretProjectData();
