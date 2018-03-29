@@ -1,4 +1,3 @@
-/// <reference path="lib/node.d.ts" />
 /*
 
  此文件需要放在引擎安装目录
@@ -44,6 +43,7 @@
 
 
  */
+Object.defineProperty(exports, "__esModule", { value: true });
 var FS = require("fs");
 var Path = require("path");
 var DEFAULT_ENGINE = "defaultEngine";
@@ -147,7 +147,7 @@ function printVersions() {
         getAllEngineVersions();
     }
     Object.keys(engines).sort(compareVersion).reverse().forEach(function (v) {
-        console.log(("Egret Engine " + engines[v].version + "  ") + engines[v].root);
+        console.log("Egret Engine " + engines[v].version + "  " + engines[v].root);
     });
 }
 function executeVersion(version, root) {
@@ -504,19 +504,13 @@ var file;
     file.getFileName = getFileName;
 })(file || (file = {}));
 function getLanguage() {
-    var selector = process['mainModule'].filename;
-    var languageXML = file.escapePath(file.joinPath(Path.dirname(selector), '../locales/language.xml'));
-    if (file.exists(languageXML)) {
-        var xml = file.read(languageXML);
-        var lang = /\<language\>([\w_]*)\<\/language>/.exec(xml);
-        if (lang) {
-            var localParts = lang[1].split('_');
-            if (localParts.length >= 1) {
-                language = localParts[0];
-            }
-        }
+    var osLocal = require("./lib/os-local.js");
+    var i18n = osLocal();
+    i18n = i18n.toLowerCase();
+    if (i18n == "zh_cn" || i18n == "zh_tw" || i18n == "zh_hk") {
+        language = "en";
     }
-    if (!language || language != "zh") {
+    else {
         language = "en";
     }
 }

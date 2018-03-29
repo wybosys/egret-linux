@@ -27,10 +27,10 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module egret.sys {
+namespace egret.sys {
 
-    var CAPS_STYLES = ["none", "round", "square"];
-    var JOINT_STYLES = ["bevel", "miter", "round"];
+    let CAPS_STYLES = ["none", "round", "square"];
+    let JOINT_STYLES = ["bevel", "miter", "round"];
     /**
      * @private
      * 矢量渲染节点
@@ -49,16 +49,17 @@ module egret.sys {
          * @param beforePath 插入在指定的路径命令之前绘制，通常是插入到当前正在绘制的线条路径之前，以确保线条总在填充的上方。
          */
         public beginFill(color:number, alpha:number = 1, beforePath?:Path2D):Path2D {
-            var path = new sys.FillPath();
+            let path = new sys.FillPath();
             path.fillColor = color;
             path.fillAlpha = alpha;
             if (beforePath) {
-                var index = this.drawData.lastIndexOf(beforePath);
+                let index = this.drawData.lastIndexOf(beforePath);
                 this.drawData.splice(index, 0, path);
             }
             else {
                 this.drawData.push(path);
             }
+            this.renderCount++;
             return path;
         }
 
@@ -74,7 +75,7 @@ module egret.sys {
          */
         public beginGradientFill(type:string, colors:number[], alphas:number[], ratios:number[],
                                  matrix?:egret.Matrix, beforePath?:Path2D):Path2D {
-            var m = new egret.Matrix();
+            let m = new egret.Matrix();
             if (matrix) {
                 m.a = matrix.a * 819.2;
                 m.b = matrix.b * 819.2;
@@ -88,19 +89,20 @@ module egret.sys {
                 m.a = 100;
                 m.d = 100;
             }
-            var path = new sys.GradientFillPath();
+            let path = new sys.GradientFillPath();
             path.gradientType = type;
             path.colors = colors;
             path.alphas = alphas;
             path.ratios = ratios;
             path.matrix = m;
             if (beforePath) {
-                var index = this.drawData.lastIndexOf(beforePath);
+                let index = this.drawData.lastIndexOf(beforePath);
                 this.drawData.splice(index, 0, path);
             }
             else {
                 this.drawData.push(path);
             }
+            this.renderCount++;
             return path;
         }
 
@@ -121,7 +123,7 @@ module egret.sys {
             if (JOINT_STYLES.indexOf(joints) == -1) {
                 joints = "round";
             }
-            var path = new StrokePath();
+            let path = new StrokePath();
             path.lineWidth = thickness;
             path.lineColor = color;
             path.lineAlpha = alpha;
@@ -129,6 +131,7 @@ module egret.sys {
             path.joints = joints;
             path.miterLimit = miterLimit;
             this.drawData.push(path);
+            this.renderCount++;
             return path;
         }
 
@@ -138,6 +141,7 @@ module egret.sys {
         public clear():void {
             this.drawData.length = 0;
             this.dirtyRender = true;
+            this.renderCount = 0;
         }
 
         /**
@@ -169,8 +173,21 @@ module egret.sys {
          * 暂时调用lineStyle,beginFill,beginGradientFill标记,实际应该draw时候标记在Path2D
          */
         public dirtyRender:boolean = true;
-        public $texture;
-        public $textureWidth;
-        public $textureHeight;
+        public $texture:WebGLTexture;
+        public $textureWidth:number;
+        public $textureHeight:number;
+        public $canvasScaleX:number;
+        public $canvasScaleY:number;
+
+        /**
+         * 清除非绘制的缓存数据
+         */
+        public clean():void {
+            if(this.$texture) {
+                WebGLUtils.deleteWebGLTexture(this.$texture);
+                this.$texture = null;
+                this.dirtyRender = true;
+            }
+        }
     }
 }

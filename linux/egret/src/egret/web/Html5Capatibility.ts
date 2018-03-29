@@ -27,16 +27,12 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module egret.web {
+namespace egret.web {
 
     /**
      * @private
      */
     export class AudioType {
-        /**
-         * @private
-         */
-        static QQ_AUDIO: number = 1;
         /**
          * @private
          */
@@ -83,12 +79,8 @@ module egret.web {
         /**
          * @private
          */
-        public static _QQRootPath: string = "";
-
-        /**
-         * @private
-         */
         public static _System_OS: number = 0;
+
         /**
          * @private
          */
@@ -103,19 +95,28 @@ module egret.web {
 
         /**
          * @private
-         * 
+         *
          */
         public static $init(): void {
-            var ua: string = navigator.userAgent.toLowerCase();
+            let ua: string = navigator.userAgent.toLowerCase();
             Html5Capatibility.ua = ua;
 
             egret.Capabilities.$isMobile = (ua.indexOf('mobile') != -1 || ua.indexOf('android') != -1);
 
-
             Html5Capatibility._canUseBlob = false;
-            var checkAudioType;
-            var audioType = Html5Capatibility._audioType;
-            if (audioType == 1 || audioType == 2 || audioType == 3) {
+            let canUseWebAudio = window["AudioContext"] || window["webkitAudioContext"] || window["mozAudioContext"];
+            if (canUseWebAudio) {
+                try {
+                    //防止某些chrome版本创建异常问题
+                    WebAudioDecode.ctx = new (window["AudioContext"] || window["webkitAudioContext"] || window["mozAudioContext"])();
+                }
+                catch (e) {
+                    canUseWebAudio = false;
+                }
+            }
+            let audioType = Html5Capatibility._audioType;
+            let checkAudioType;
+            if ((audioType == AudioType.WEB_AUDIO && canUseWebAudio) || audioType == AudioType.HTML5_AUDIO) {
                 checkAudioType = false;
                 Html5Capatibility.setAudioType(audioType);
             }
@@ -130,28 +131,10 @@ module egret.web {
                 egret.Capabilities.$os = "Windows Phone";
             }
             else if (ua.indexOf("android") >= 0) {//android
-                Html5Capatibility._System_OS = SystemOSType.ADNROID;
-
                 egret.Capabilities.$os = "Android";
-
                 Html5Capatibility._System_OS = SystemOSType.ADNROID;
-                if (window.hasOwnProperty("QZAppExternal") && ua.indexOf("qzone") >= 0) {
-                    Html5Capatibility.setAudioType(AudioType.QQ_AUDIO);
-
-                    var bases = document.getElementsByTagName('base');
-                    if (bases && bases.length > 0) {
-                        Html5Capatibility._QQRootPath = bases[0]["baseURI"];
-                    }
-                    else {
-                        var endIdx = window.location.href.indexOf("?");
-                        if (endIdx == -1) {
-                            endIdx = window.location.href.length;
-                        }
-                        var url = window.location.href.substring(0, endIdx);
-                        url = url.substring(0, url.lastIndexOf("/"));
-
-                        Html5Capatibility._QQRootPath = url + "/";
-                    }
+                if (checkAudioType && canUseWebAudio) {
+                    Html5Capatibility.setAudioType(AudioType.WEB_AUDIO);
                 }
             }
             else if (ua.indexOf("iphone") >= 0 || ua.indexOf("ipad") >= 0 || ua.indexOf("ipod") >= 0) {//ios
@@ -160,8 +143,9 @@ module egret.web {
                 Html5Capatibility._System_OS = SystemOSType.IOS;
                 if (Html5Capatibility.getIOSVersion() >= 7) {
                     Html5Capatibility._canUseBlob = true;
-
-                    Html5Capatibility.setAudioType(AudioType.WEB_AUDIO);
+                    if (checkAudioType && canUseWebAudio) {
+                        Html5Capatibility.setAudioType(AudioType.WEB_AUDIO);
+                    }
                 }
             }
             else {
@@ -173,15 +157,14 @@ module egret.web {
                 }
             }
 
-            var winURL = window["URL"] || window["webkitURL"];
+            let winURL = window["URL"] || window["webkitURL"];
             if (!winURL) {
                 Html5Capatibility._canUseBlob = false;
             }
 
-
-            var canUseWebAudio = window["AudioContext"] || window["webkitAudioContext"] || window["mozAudioContext"];
-            if (!canUseWebAudio && Html5Capatibility._audioType == AudioType.WEB_AUDIO) {
+            if (ua.indexOf("egretnative") >= 0) {// Egret Native
                 Html5Capatibility.setAudioType(AudioType.HTML5_AUDIO);
+                Html5Capatibility._canUseBlob = true;
             }
 
             egret.Sound = Html5Capatibility._AudioClass;
@@ -190,9 +173,6 @@ module egret.web {
         private static setAudioType(type: number): void {
             Html5Capatibility._audioType = type;
             switch (type) {
-                case AudioType.QQ_AUDIO:
-                    Html5Capatibility._AudioClass = egret.web.QQSound;
-                    break;
                 case AudioType.WEB_AUDIO:
                     Html5Capatibility._AudioClass = egret.web.WebAudioSound;
                     break;
@@ -208,8 +188,8 @@ module egret.web {
          * @returns {string}
          */
         private static getIOSVersion(): number {
-            var value = Html5Capatibility.ua.toLowerCase().match(/cpu [^\d]*\d.*like mac os x/)[0];
-            return parseInt(value.match(/\d(_\d)*/)[0]) || 0;
+            let value = Html5Capatibility.ua.toLowerCase().match(/cpu [^\d]*\d.*like mac os x/)[0];
+            return parseInt(value.match(/\d+(_\d)*/)[0]) || 0;
         }
 
         /**
@@ -217,8 +197,8 @@ module egret.web {
          *
          */
         private static checkHtml5Support() {
-            var language = (navigator.language || navigator.browserLanguage).toLowerCase();
-            var strings = language.split("-");
+            let language = (navigator.language || navigator["browserLanguage"]).toLowerCase();
+            let strings = language.split("-");
             if (strings.length > 1) {
                 strings[1] = strings[1].toUpperCase();
             }
@@ -230,20 +210,20 @@ module egret.web {
     /**
      * @private
      */
-    var currentPrefix: string = null;
+    let currentPrefix: string = null;
 
     /**
      * @private
      */
     export function getPrefixStyleName(name: string, element?: any): string {
-        var header: string = "";
+        let header: string = "";
 
         if (element != null) {
             header = getPrefix(name, element);
         }
         else {
             if (currentPrefix == null) {
-                var tempStyle = document.createElement('div').style;
+                let tempStyle = document.createElement('div').style;
                 currentPrefix = getPrefix("transform", tempStyle);
             }
             header = currentPrefix;
@@ -265,9 +245,9 @@ module egret.web {
         }
 
         name = name.charAt(0).toUpperCase() + name.substring(1, name.length);
-        var transArr: Array<string> = ["webkit", "ms", "Moz", "O"];
-        for (var i: number = 0; i < transArr.length; i++) {
-            var tempStyle: string = transArr[i] + name;
+        let transArr: string[] = ["webkit", "ms", "Moz", "O"];
+        for (let i: number = 0; i < transArr.length; i++) {
+            let tempStyle: string = transArr[i] + name;
 
             if (tempStyle in element) {
                 return transArr[i];

@@ -1,5 +1,6 @@
-var FS = require('fs');
-var file = require('../lib/FileUtil');
+Object.defineProperty(exports, "__esModule", { value: true });
+var FS = require("fs");
+var file = require("../lib/FileUtil");
 var DirectoryState = (function () {
     function DirectoryState() {
     }
@@ -39,7 +40,7 @@ var DirectoryState = (function () {
             }
         });
         this.lastStates = currentStates;
-        console.log("扫描到的文件变化列表:");
+        globals.log(1310);
         console.log(fileChanges);
         return fileChanges;
     };

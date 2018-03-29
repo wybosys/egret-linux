@@ -1,4 +1,5 @@
 /// <reference path="../lib/types.d.ts" />
+Object.defineProperty(exports, "__esModule", { value: true });
 function parse(args, rawArgs) {
     var commandMap = {
         "c": convertCreate,
@@ -21,6 +22,8 @@ function convertCreate(args, rawArgs) {
 }
 function convertBuild(args, rawArgs) {
     args.command = "build";
-    if (args['buildEngine'])
+    if (args['buildEngine']) {
+        // console.log('egret build -e 已经废弃，请使用 egret clean 代替')
         args.command = 'clean';
+    }
 }

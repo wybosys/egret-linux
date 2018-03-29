@@ -44,64 +44,12 @@ module globals {
         return true;
     }
 
-
-    export function getAsync() {
-        return require('./lib/core/async');
-    }
-
     export function getCrc32() {
         return require("./lib/core/crc32");
     }
 
-    export function getCompiler(method) {
-        if (method == "uglify") {
-            return require("./lib/uglify-js/uglify_adapt");
-        }
-        else {
-            return require("./lib/core/closureCompiler");
-        }
-    }
-
-    export function getExmlc() {
-        return require("./lib/exml/exmlc");
-    }
-
-    export function getCodeUtil() {
-        return require("./lib/core/code_util");
-    }
-
-    export function getOpen() {
-        return require("./lib/core/open");
-    }
-
-    export function getCreateManifest() {
-        return require("./lib/tools/create_manifest.js");
-    }
-
     export function addQuotes(str) {
         return "\"" + str + "\"";
-    }
-
-    export function getGlobalJava() {
-        var JAVA_EXT = process.platform == 'win32' ? '.exe' : '';
-
-        var java = file.joinPath(process.execPath, "../jre/bin", "java" + JAVA_EXT);
-        if (!file.exists(java)) {
-            java = null;
-            if (process.env["JAVA_HOME"]) {
-                java = file.joinPath(process.env["JAVA_HOME"], "bin", "java" + JAVA_EXT);
-                if (!file.exists(java)) {
-                    java = null;
-                }
-            }
-        }
-        if (!java) {
-            java = "java";
-        }
-        else {
-            java = '"' + java + '"';
-        }
-        return java;
     }
 
     var CodeUtil = require("./lib/exml/code_util.js");
@@ -147,14 +95,14 @@ module globals {
 
     export function compressVersion(v1, v2): number {
         var version1Arr = v1.split(".");
-        var version1_1 = version1Arr[0];
-        var version1_2 = version1Arr[1];
-        var version1_3 = version1Arr[2];
+        var version1_1 = parseInt(version1Arr[0]);
+        var version1_2 = parseInt(version1Arr[1]);
+        var version1_3 = parseInt(version1Arr[2]);
 
         var version1Arr = v2.split(".");
-        var version2_1 = version1Arr[0];
-        var version2_2 = version1Arr[1];
-        var version2_3 = version1Arr[2];
+        var version2_1 = parseInt(version1Arr[0]);
+        var version2_2 = parseInt(version1Arr[1]);
+        var version2_3 = parseInt(version1Arr[2]);
         if (version1_1 > version2_1) {
             return 1
         }
@@ -178,5 +126,5 @@ module globals {
         }
     }
 }
-
+declare var global: any;
 global.globals = globals;

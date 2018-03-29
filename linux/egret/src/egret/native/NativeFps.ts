@@ -26,24 +26,25 @@
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-module egret.native {
+namespace egret.native {
     /**
      * @private
      */
     export class NativeFps extends egret.Sprite implements egret.FPSDisplay {
-        private panelX:number;
-        private panelY:number;
-        private fpsHeight:number;
-        private fontColor:number;
-        private fontSize:number;
-        private bgAlpha:number;
+        private panelX: number;
+        private panelY: number;
+        private fpsHeight: number;
+        private fontColor: number;
+        private fontSize: number;
+        private bgAlpha: number;
         private shape;
         private textFps;
         private textLog;
         private showFps;
         private showLog;
         private _stage;
-        constructor(stage:Stage, showFPS:boolean, showLog:boolean, logFilter:string, styles:Object) {
+
+        constructor(stage: Stage, showFPS: boolean, showLog: boolean, logFilter: string, styles: Object) {
             super();
             if (showFPS || showLog) {
                 this.panelX = styles["x"] === undefined ? 0 : parseInt(styles['x']);
@@ -61,51 +62,95 @@ module egret.native {
                 if (showLog) this.addLog();
             }
         }
+
         private addFps() {
-            var fps = new egret.TextField();
+            let fps = new egret.TextField();
             fps.x = fps.y = 4;
             this.textFps = fps;
             this.addChild(fps);
-            fps.lineSpacing =  2;
+            fps.lineSpacing = 2;
             fps.size = this.fontSize;
             fps.textColor = this.fontColor;
-            fps.textFlow=[
-                {text: `0 FPS ${egret.Capabilities.renderMode}\n`},
-                {text: `Draw: 0\nDirty: 0%\n`},
-                {text: "Cost: "},
-                {text: "0 ", style: {"textColor": 0x18fefe}},
-                {text: "0 ", style: {"textColor": 0xffff00}},
-                {text: "0 ", style: {"textColor": 0xff0000}}
+            fps.textFlow = [
+                { text: `0 FPS ${egret.Capabilities.renderMode}\n` },
+                { text: `min0 max60 avg30\n` },
+                { text: `Draw: 0\nDirty: 0%\n` },
+                { text: "Cost: " },
+                { text: "0 ", style: { "textColor": 0x18fefe } },
+                { text: "0 ", style: { "textColor": 0xffff00 } },
+                { text: "0 ", style: { "textColor": 0xff0000 } }
             ];
         }
 
         private addLog() {
-            var text = new egret.TextField();
+            let text = new egret.TextField();
             text.size = this.fontSize;
             text.textColor = this.fontColor;
             text.x = 4;
             this.addChild(text);
             this.textLog = text;
-        };
-        public update(datas:FPSData) {
-            this.textFps.textFlow=[
-                {text: `${datas.fps} FPS ${egret.Capabilities.renderMode}\n`},
-                {text: `Draw: ${datas.draw}\nDirty: ${datas.dirty}%\n`},
-                {text: "Cost: "},
-                {text: `${datas.costTicker} `, style: {"textColor": 0x18fefe}},
-                {text: `${datas.costDirty} `, style: {"textColor": 0xffff00}},
-                {text: `${datas.costRender} `, style: {"textColor": 0xff0000}}
-            ]
-            this.updateLayout();
-        };
-        private arrLog:string[] = [];
-        public updateInfo(info:string) {
-            var fpsHeight = 0;
+        }
+
+        private arrFps = [];
+
+        public update(datas: FPSData) {
+            this.arrFps.push(datas.fps);
+            let fpsTotal = 0;
+            let lenFps = this.arrFps.length;
+
+            if (lenFps > 101) {
+                lenFps = 101;
+                this.arrFps.shift();
+            }
+            let fpsMin = this.arrFps[0];
+            let fpsMax = this.arrFps[0];
+            for (let i = 0; i < lenFps; i++) {
+                let num = this.arrFps[i];
+                fpsTotal += num;
+                if (num < fpsMin) fpsMin = num;
+                else if (num > fpsMax) fpsMax = num;
+            }
+
+            this.textFps.textFlow = [
+                { text: `${datas.fps} FPS ${egret.Capabilities.renderMode}\n` },
+                { text: `min${fpsMin} max${fpsMax} avg${Math.floor(fpsTotal / lenFps)}\n` },
+                { text: `Draw: ${datas.draw}\nDirty: ${datas.dirty}%\n` },
+                { text: "Cost: " },
+                { text: `${datas.costTicker} `, style: { "textColor": 0x18fefe } },
+                { text: `${datas.costDirty} `, style: { "textColor": 0xffff00 } },
+                { text: `${datas.costRender} `, style: { "textColor": 0xff0000 } }
+            ];
+        }
+
+        private arrLog: string[] = [];
+
+        public updateInfo(info: string) {
+            this.updateLogDisplay(info, 1);
+        }
+
+        public updateWarn(info: string) {
+            this.updateLogDisplay(info, 2);
+        }
+
+        public updateError(info: string) {
+            this.updateLogDisplay(info, 3);
+        }
+
+        private updateLogDisplay(info: string, type: number) {
+            let fpsHeight = 0;
             if (this.showFps) {
-                fpsHeight = this.textFps.height;
+                fpsHeight = this.textFps.textHeight;
                 this.textLog.y = fpsHeight + 4;
             }
-            this.arrLog.push(info);
+            if (type == 3) {
+                this.arrLog.push("[Error]" + info);
+            }
+            else if (type == 2) {
+                this.arrLog.push("[Warning]" + info);
+            }
+            else {
+                this.arrLog.push(info);
+            }
             this.textLog.text = this.arrLog.join('\n');
             if (this._stage.stageHeight > 0) {
                 if (this.textLog.textWidth > this._stage.stageWidth - 20 - this.panelX) {
@@ -116,18 +161,6 @@ module egret.native {
                     this.textLog.text = this.arrLog.join("\n");
                 }
             }
-            this.updateLayout();
-        }
-
-        private updateLayout() {
-            if (egret.Capabilities.runtimeType == RuntimeType.NATIVE) {
-                return;
-            }
-            var g = this.shape.$graphics;
-            g.clear();
-            g.beginFill(0x000000, this.bgAlpha);
-            g.drawRect(0, 0, this.width + 8, this.height + 8);
-            g.endFill();
         }
     }
     egret.FPSDisplay = NativeFps;

@@ -1,9 +1,5 @@
-
-var game_file_list = [
-    //以下为自动修改，请勿修改
-    //----auto game_file_list start----
-    //----auto game_file_list end----
-];
+var manifest = JSON.parse(egret_native.readFileSync("manifest.json"));
+var game_file_list = manifest.initial.concat(manifest.game);
 
 var window = this;
 
@@ -17,9 +13,14 @@ egret_native.requireFiles = function () {
 };
 
 egret_native.egretInit = function () {
+    if(egret_native.featureEnable) {
+        //控制一些优化方案是否开启
+        //Control whether some optimization options are open
+        var result = egret_native.featureEnable({
+            
+        });
+    }
     egret_native.requireFiles();
-    egret.TextField.default_fontFamily = "/system/fonts/DroidSansFallback.ttf";
-    //egret.dom为空实现
     egret.dom = {};
     egret.dom.drawAsCanvas = function () {
     };
@@ -28,12 +29,13 @@ egret_native.egretInit = function () {
 egret_native.egretStart = function () {
     var option = {
         //以下为自动修改，请勿修改
+        //The following is automatically modified, please do not modify
         //----auto option start----
         //----auto option end----
     };
 
     egret.native.NativePlayer.option = option;
     egret.runEgret();
-    egret_native.Label.createLabel(egret.TextField.default_fontFamily, 20, "", 0);
+    egret_native.Label.createLabel("/system/fonts/DroidSansFallback.ttf", 20, "", 0);
     egret_native.EGTView.preSetOffScreenBufferEnable(true);
 };

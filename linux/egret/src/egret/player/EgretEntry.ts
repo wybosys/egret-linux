@@ -27,26 +27,75 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module egret {
+namespace egret {
+
+    export type runEgretOptions = {
+        renderMode?: string;
+        audioType?: number;
+        screenAdapter?: sys.IScreenAdapter;
+        antialias?: boolean;
+        canvasScaleFactor?: number;
+        calculateCanvasScaleFactor?: (context:CanvasRenderingContext2D)=>number
+    };
+
     /**
-     * @language en_US
      * egret project entry function
      * @param options An object containing the initialization properties for egret engine.
+     * @language en_US
      */
     /**
-     * @language zh_CN
      * egret工程入口函数
      * @param options 一个可选对象，包含初始化Egret引擎需要的参数。
-     */
-    export declare function runEgret(options?:{renderMode?:string;audioType?:number;screenAdapter?:sys.IScreenAdapter}):void;
-    /**
-     * @language en_US
-     * Refresh the screen display
-     */
-    /**
      * @language zh_CN
-     * 刷新屏幕显示
      */
-    export declare function updateAllScreens():void;
+    export declare function runEgret(options?: runEgretOptions): void;
+    /**
+     * Refresh the screen display
+     * @language en_US
+     */
+    /**
+     * 刷新屏幕显示
+     * @language zh_CN
+     */
+    export declare function updateAllScreens(): void;
+
+    /**
+     * @private
+     */
+    export type CustomContext = {
+
+        onStart: (egretContext: EgretContext) => void;
+
+        onRender: (egretContext: EgretContext) => void;
+
+        onStop: (egretContext: EgretContext) => void;
+
+        onResize: (egretContext: EgretContext) => void;
+    }
+
+    /**
+     * @private
+     */
+    export type EgretContext = {
+
+        setAutoClear: (value: boolean) => void;
+
+        save: () => void;
+
+        restore: () => void;
+
+    }
+
+    /**
+     * Insert render context, now for egret3d
+     * @private
+     * @language en_US
+     */
+    /**
+     * 插入渲染上下文，目前用于egret3d的混入
+     * @private
+     * @language zh_CN
+     */
+    export declare function setRendererContext(custom: CustomContext): void;
 
 }

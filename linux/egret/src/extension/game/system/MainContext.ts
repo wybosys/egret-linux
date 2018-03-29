@@ -28,7 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 
-module egret {
+namespace egret {
     /**
      * @class egret.MainContext
      * @classdesc
@@ -63,14 +63,6 @@ module egret {
          * @platform Web,Native
          */
         //public touchContext:TouchContext = null;
-
-        /**
-         * 网络Context
-         * @member egret.MainContext#netContext
-         * @version Egret 2.4
-         * @platform Web,Native
-         */
-        //public netContext:NetContext = null;
 
         /**
          * 设备divice
@@ -118,7 +110,7 @@ module egret {
          * @platform Web,Native
          */
         public static get runtimeType():string {
-            egret.$warn(1041);
+            egret.$warn(1041, "egret.MainContext.runtimeType", "egret.Capabilities.runtimeType");
             return MainContext._runtimeType;
         }
         /**
@@ -163,25 +155,28 @@ module egret {
     }
 }
 
-
-var testDeviceType1 = function () {
-    if (!this["navigator"]) {
+/**
+ * @private
+ */
+egret["testDeviceType1"] = function () {
+    if (!__global["navigator"]) {
         return true
     }
-    var ua = navigator.userAgent.toLowerCase();
+    let ua = navigator.userAgent.toLowerCase();
     return (ua.indexOf('mobile') != -1 || ua.indexOf('android') != -1);
 };
-
-var testRuntimeType1 = function () {
-    if (this["navigator"]) {
+/**
+ * @private
+ */
+egret["testRuntimeType1"] = function () {
+    if (__global["navigator"]) {
         return true;
     }
     return false;
 };
 
-egret.MainContext.deviceType = testDeviceType1() ? egret.MainContext.DEVICE_MOBILE : egret.MainContext.DEVICE_PC;
-egret.MainContext._runtimeType = testRuntimeType1() ? egret.MainContext.RUNTIME_HTML5 : egret.MainContext.RUNTIME_NATIVE;
+egret.MainContext.deviceType = egret["testDeviceType1"]() ? egret.MainContext.DEVICE_MOBILE : egret.MainContext.DEVICE_PC;
+egret.MainContext._runtimeType = egret["testRuntimeType1"]() ? egret.MainContext.RUNTIME_HTML5 : egret.MainContext.RUNTIME_NATIVE;
 
-
-delete testDeviceType1;
-delete testRuntimeType1;
+delete egret["testDeviceType1"];
+delete egret["testRuntimeType1"];

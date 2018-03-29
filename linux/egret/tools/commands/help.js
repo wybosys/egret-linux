@@ -1,5 +1,5 @@
 /// <reference path="../lib/types.d.ts" />
-var helpParser = require('./help/helpParser');
+var helpParser = require("./help/helpParser");
 var Help = (function () {
     function Help() {
     }
@@ -16,6 +16,7 @@ var Help = (function () {
                 var bParseConfig = true;
                 if (bParseConfig) {
                     var result = helpParser.logHelpDef(helpName);
+                    //console.log( ">>>: " + result );
                 }
                 return;
             }

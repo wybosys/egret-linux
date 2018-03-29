@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module egret {
+namespace egret {
     /**
      * @private
      */
@@ -38,14 +38,22 @@ module egret {
         update(datas:FPSData):void;
 
         /**
-         * 插入一条日志信息
+         * 插入一条log信息
          */
-        updateInfo(info:string):void;
+        updateInfo(info: string): void;
+        /**
+         * 插入一条warn信息
+         */
+        updateWarn(info: string): void;
+        /**
+         * 插入一条error信息
+         */
+        updateError(info: string): void;
     }
     /**
      * @private
      */
-    export var FPSDisplay:{
+    export let FPSDisplay:{
         new (stage:Stage, showFPS:boolean, showLog:boolean, logFilter:string,styles:Object): FPSDisplay
     };
 }

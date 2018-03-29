@@ -1,15 +1,11 @@
 /// <reference path="../lib/types.d.ts" />
-var utils = require('../lib/utils');
-var file = require('../lib/FileUtil');
+Object.defineProperty(exports, "__esModule", { value: true });
+var file = require("../lib/FileUtil");
 var exml = require("../lib/eui/EXML");
-var exmlParser = require("../lib/eui/parser/EXMLParser");
+var EgretProject = require("../project/EgretProject");
+var exmlParser = require("../lib/eui/EXMLParser");
 var parser = new exmlParser.EXMLParser();
 function beforeBuild() {
-    //eui生成js文件不用清空类定义
-    //var exmlDtsPath = getExmlDtsPath();
-    //if (file.exists(exmlDtsPath)) {
-    //    file.save(exmlDtsPath, "");
-    //}
     generateExmlDTS();
 }
 exports.beforeBuild = beforeBuild;
@@ -29,11 +25,6 @@ function buildChanges(exmls) {
     };
     if (!exmls || exmls.length == 0)
         return state;
-    if (egret.args.exmlGenJs) {
-        exmls.forEach(function (exmlFile) {
-            parse(exmlFile);
-        });
-    }
     return state;
 }
 exports.buildChanges = buildChanges;
@@ -96,7 +87,27 @@ function updateSetting(merge) {
     themeDatas.forEach(function (thm) { return thm.exmls = []; });
     exmls.forEach(function (e) {
         var epath = e.path;
-        var exmlEl = merge ? { path: e.path, content: e.content } : epath;
+        var exmlEl = epath;
+        if (merge) {
+            var state = EgretProject.data.getExmlPublishPolicy();
+            switch (state) {
+                case "path":
+                    break;
+                case "content":
+                    exmlEl = { path: e.path, content: e.content };
+                    break;
+                case "gjs":
+                    var result = parser.parse(e.content);
+                    exmlEl = { path: e.path, gjs: result.code, className: result.className };
+                    break;
+                //todo
+                case "bin":
+                    break;
+                default:
+                    exmlEl = { path: e.path, content: e.content };
+                    break;
+            }
+        }
         themeDatas.forEach(function (thm, i) {
             if (epath in oldEXMLS) {
                 var thmPath = themes[i];
@@ -104,33 +115,48 @@ function updateSetting(merge) {
                 if (exmlFile.theme.indexOf("," + thmPath + ",") >= 0)
                     thm.exmls.push(exmlEl);
             }
-            else
+            else if (thm.autoGenerateExmlsList) {
                 thm.exmls.push(exmlEl);
+            }
         });
     });
     themes.forEach(function (thm, i) {
-        if (themeDatas[i].autoGenerateExmlsList == false)
-            return;
         var path = file.joinPath(egret.args.projectDir, thm);
-        themeDatas[i].autoGenerateExmlsList;
         var thmData = JSON.stringify(themeDatas[i], null, "  ");
         file.save(path, thmData);
     });
 }
 exports.updateSetting = updateSetting;
 function searchTheme() {
+    var result = EgretProject.data.getThemes();
+    if (result) {
+        return result;
+    }
     var files = file.searchByFunction(egret.args.projectDir, themeFilter);
     files = files.map(function (it) { return file.getRelativePath(egret.args.projectDir, it); });
     return files;
 }
 function searchEXML() {
-    return file.searchByFunction(egret.args.projectDir, exmlFilter);
+    var exmlRoots = EgretProject.data.getExmlRoots();
+    if (exmlRoots.length == 1) {
+        return file.searchByFunction(exmlRoots[0], exmlFilter);
+    }
+    else {
+        return exmlRoots.reduce(function (previousValue, currentValue) {
+            previousValue = previousValue.concat(file.searchByFunction(currentValue, exmlFilter));
+            return previousValue;
+        }, []);
+    }
 }
-function sort(exmls) {
-    var preload = exmls.filter(function (e) { return e.preload; });
-}
+var ignorePath = EgretProject.data.getIgnorePath();
 function exmlFilter(f) {
-    return /\.exml$/.test(f) && (f.indexOf(egret.args.releaseRootDir) < 0);
+    var isIgnore = false;
+    ignorePath.forEach(function (path) {
+        if (f.indexOf(path) != -1) {
+            isIgnore = true;
+        }
+    });
+    return /\.exml$/.test(f) && (f.indexOf(egret.args.releaseRootDir) < 0) && !isIgnore;
 }
 function themeFilter(f) {
     return (f.indexOf('.thm.json') > 0) && (f.indexOf(egret.args.releaseRootDir) < 0);
@@ -192,52 +218,4 @@ function generateExmlDTS() {
     var exmlDtsPath = getExmlDtsPath();
     file.save(exmlDtsPath, dts);
     return dts;
-}
-var module_template = "var {module};\n" +
-    "(function ({module}) {\n" +
-    "{definition}\n" +
-    "})({module} || ({module} = {}));";
-function parse(exmlPath) {
-    var xmlString = file.read(exmlPath, true);
-    var classText = parser.parse(xmlString);
-    //获得类名和模块名
-    //var className = parser.getClassNameOfNode(parser.topNode);
-    var className = parser.className;
-    var moduleName;
-    var index = className.lastIndexOf(".");
-    if (index != -1) {
-        moduleName = className.substring(0, index);
-        className = className.substring(index + 1);
-    }
-    //配置类名声明
-    classText = "var " + className + "=" + classText;
-    //配置模块声明
-    var jstext = "{definition}"; //初始模块为入口载入模版
-    if (moduleName) {
-        var indent = -1;
-        moduleName.split(".").forEach(function (module) {
-            //模版添加缩进
-            indent += 1;
-            var template = utils.addIndents(indent, module_template);
-            //var template = utils.IndentAdder.getInstance().addIndents(indent,module_template);
-            //注入模块名
-            template = utils.inject(template, { module: module });
-            //加载模版
-            jstext = utils.inject(jstext, { definition: template });
-        });
-        //在最里层添加类定义
-        var indentedClass = utils.addIndents(indent + 1, classText);
-        //var indentedClass = utils.IndentAdder.getInstance().addIndents(indent+1,classText);
-        jstext = utils.inject(jstext, { definition: indentedClass });
-    }
-    else {
-        jstext = classText;
-    }
-    var relativeEXMLPath = file.getRelativePath(egret.args.projectDir, exmlPath);
-    var relativeTSPath = relativeEXMLPath.substring(0, relativeEXMLPath.lastIndexOf(".")).concat(".ts");
-    var tspath = file.joinPath(egret.args.srcDir, "gen", relativeTSPath);
-    //console.log(tspath);
-    //var jspath = exmlPath.substring(0,exmlPath.lastIndexOf(".")).concat(".ts");
-    //file.save(jspath,jstext);
-    file.save(tspath, jstext);
 }

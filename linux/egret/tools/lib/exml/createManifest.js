@@ -1,4 +1,5 @@
 /// <reference path="../types.d.ts" />
+Object.defineProperty(exports, "__esModule", { value: true });
 var file = require("../FileUtil");
 var xml = require("../xml/index");
 var CodeUtil = require("./code_util");
@@ -482,16 +483,6 @@ function readReferenceFromExml(path) {
         return;
     }
     var list = [];
-    if (modeulClassToPath) {
-        list.push(modeulClassToPath["lark.gui.AddItems"]);
-        list.push(modeulClassToPath["lark.gui.SetProperty"]);
-        list.push(modeulClassToPath["lark.gui.SetStyle"]);
-        list.push(modeulClassToPath["lark.gui.State"]);
-        list.push(modeulClassToPath["lark.gui.getScale9Grid"]);
-        list.push(modeulClassToPath["lark.gui.ClassFactory"]);
-        list.push(modeulClassToPath["lark.gui.setProperties"]);
-        list.push(modeulClassToPath["lark.gui.ButtonSkin"]);
-    }
     readReferenceFromNode(exml, list);
     referenceInfoList[path] = list;
 }

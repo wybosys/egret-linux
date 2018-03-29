@@ -1,4 +1,5 @@
 /// <reference path="../lib/types.d.ts" />
+Object.defineProperty(exports, "__esModule", { value: true });
 var htmlparser = require("../lib/htmlparser");
 function normalize(project) {
     project.entryClass = project.entryClass || "Main";
@@ -9,7 +10,6 @@ function normalize(project) {
     project.frameRate = project.frameRate || 30;
     project.contentWidth = project.contentWidth || 640;
     project.contentHeight = project.contentHeight || 1136;
-    project.moduleScripts = project.moduleScripts || [];
     project.showLog = project.showLog || false;
     project.logFilter = project.logFilter || "";
     project.maxTouches = project.maxTouches || 2;
@@ -58,8 +58,8 @@ function getLibsList(html, isNative, isDebug) {
     }
 }
 exports.getLibsList = getLibsList;
-var doT = require('../lib/doT');
-var FileUtil = require('../lib/FileUtil');
+var doT = require("../lib/doT");
+var FileUtil = require("../lib/FileUtil");
 function getNativeProjectInfo(html) {
     if (!FileUtil.exists(html))
         return;

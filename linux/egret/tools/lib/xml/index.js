@@ -15,6 +15,7 @@
 * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
+Object.defineProperty(exports, "__esModule", { value: true });
 var sax = require("./sax");
 var saxparser = sax.parser(true);
 function parse(xmlString) {
@@ -28,7 +29,7 @@ function parse(xmlString) {
     saxparser.onopentag = function (node) {
         node.nodeType = 1;
         var attribs = node.attributes;
-        delete node["attributes"];
+        // delete node["attributes"];
         for (var key in attribs) {
             index = key.indexOf("xmlns:");
             if (index == 0) {
@@ -83,6 +84,10 @@ function parse(xmlString) {
         }
     };
     saxparser.ontext = function (text) {
+        //忽略格式化字符
+        if (text.indexOf("\n") != -1) {
+            return;
+        }
         if (object && !object.text && !object.children) {
             object.nodeType = 3;
             object.text = text;
