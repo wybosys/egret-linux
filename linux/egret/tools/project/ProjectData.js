@@ -322,7 +322,7 @@ function getAppDataPath() {
             break;
         case 'linux':
 	        var selector = process['mainModule'].filename;
-	        result = file.escapePath(file.joinPath(_path.dirname(selector), './engine/'));
+	        result = file.escapePath(file.joinPath(_path.dirname(_path.dirname(_path.dirname(_path.dirname(_path.dirname(_path.dirname(selector)))))), './engine/'));
             break;
         default:
             ;
