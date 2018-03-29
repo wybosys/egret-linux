@@ -322,13 +322,13 @@ function getAppDataPath() {
             break;
         case 'linux':
 	        var selector = process['mainModule'].filename;
-	        path = file.escapePath(file.joinPath(_path.dirname(selector), './engine/'));
+	        result = file.escapePath(file.joinPath(_path.dirname(selector), './engine/'));
             break;
         default:
             ;
     }
     if (!file.exists(result)) {
-        throw 'missing appdata path';
+        throw 'missing appdata path ' + result;
     }
     return result;
 }
