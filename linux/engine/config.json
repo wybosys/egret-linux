@@ -1,19 +1,7 @@
 {
 	"egret":{
-		"3.1.4":{
-			"root":"egret-core-3.1.4"
-		},
-		"3.1.6":{
-			"root":"egret-core-3.1.6"
-		},
-		"3.1.7":{
-			"root":"egret-core-3.1.7"
-		},
-		"3.2.0":{
-			"root":"egret-core-3.2.0"
-		},
 		"5.1.8":{
-			"root":"egret-core-5.1.8"
+			"root":"5.1.8"
 		}		
 	}
 }
