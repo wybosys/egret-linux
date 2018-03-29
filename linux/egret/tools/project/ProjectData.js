@@ -320,6 +320,10 @@ function getAppDataPath() {
             var appdata = process.env.AppData || process.env.USERPROFILE + "/AppData/Roaming/";
             result = file.escapePath(appdata);
             break;
+        case 'linux':
+	        var selector = process['mainModule'].filename;
+	        path = file.escapePath(file.joinPath(Path.dirname(selector), './engine/'));
+            break;
         default:
             ;
     }
