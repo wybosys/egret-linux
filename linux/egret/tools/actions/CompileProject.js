@@ -1,19 +1,13 @@
 /// <reference path="../lib/types.d.ts" />
 // import Compiler = require('./Compiler');
 var FileUtil = require("../lib/FileUtil");
-var exmlActions = require("../actions/exml");
 var path = require("path");
 var Compiler = require("./Compiler");
 var CompileProject = (function () {
     function CompileProject() {
     }
     CompileProject.prototype.compile = function (options) {
-        //console.log("----compileProject.compile----")
-        exmlActions.beforeBuild();
-        //编译
-        exmlActions.build();
         var result = this.compileProject(options);
-        exmlActions.afterBuild();
         if (result.exitStatus)
             return null;
         return result;

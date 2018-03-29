@@ -63,8 +63,6 @@ namespace egret {
 interface FPSData extends Object{
     fps:number;
     draw:number;
-    dirty:number;
     costTicker:number;
-    costDirty:number;
     costRender:number;
 }
