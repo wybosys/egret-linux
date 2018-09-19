@@ -183,7 +183,11 @@ namespace egret.sys {
         /**
          * @private
          */
-        inputType
+        inputType,
+        /**
+         * @private
+         */
+        textLinesChangedForNativeRender
     }
 }
 
@@ -322,7 +326,8 @@ namespace egret {
                 34: 0xffffff,              //backgroundColor
                 35: null,           //restrictAnd
                 36: null,           //restrictNot
-                37: TextFieldInputType.TEXT            //inputType
+                37: TextFieldInputType.TEXT,            //inputType
+                38: false            //textLinesChangedForNativeRender
             };
         }
 
@@ -601,8 +606,9 @@ namespace egret {
 
         $setLineSpacing(value: number): boolean {
             let values = this.$TextField;
-            if (values[sys.TextKeys.lineSpacing] == value)
+            if (values[sys.TextKeys.lineSpacing] == value) {
                 return false;
+            }
             values[sys.TextKeys.lineSpacing] = value;
             this.$invalidateTextField();
             if (egret.nativeRender) {
@@ -776,6 +782,9 @@ namespace egret {
          * @language zh_CN
          */
         public set inputType(value: string) {
+            if (this.$TextField[sys.TextKeys.inputType] == value) {
+                return;
+            }
             this.$TextField[sys.TextKeys.inputType] = value;
             if (egret.nativeRender) {
                 this.$nativeDisplayObject.setInputType(value);
@@ -1066,7 +1075,11 @@ namespace egret {
          * @language zh_CN
          */
         public set scrollV(value: number) {
-            this.$TextField[sys.TextKeys.scrollV] = Math.max(value, 1);
+            value = Math.max(value, 1);
+            if (value == this.$TextField[sys.TextKeys.scrollV]) {
+                return;
+            }
+            this.$TextField[sys.TextKeys.scrollV] = value;
             if (egret.nativeRender) {
                 this.$nativeDisplayObject.setScrollV(value);
             }
@@ -1183,6 +1196,9 @@ namespace egret {
          * @param value
          */
         $setMultiline(value: boolean): boolean {
+            if (this.$TextField[sys.TextKeys.multiline] == value) {
+                return false;
+            }
             this.$TextField[sys.TextKeys.multiline] = value;
             this.$invalidateTextField();
             if (egret.nativeRender) {
@@ -1400,7 +1416,11 @@ namespace egret {
          */
         $setBorder(value: boolean): void {
             value = !!value;
+            if (this.$TextField[sys.TextKeys.border] == value) {
+                return;
+            }
             this.$TextField[sys.TextKeys.border] = value;
+            this.$invalidateTextField();
             if (egret.nativeRender) {
                 this.$nativeDisplayObject.setBorder(value);
             }
@@ -1435,7 +1455,11 @@ namespace egret {
          */
         $setBorderColor(value: number): void {
             value = +value || 0;
+            if (this.$TextField[sys.TextKeys.borderColor] == value) {
+                return;
+            }
             this.$TextField[sys.TextKeys.borderColor] = value;
+            this.$invalidateTextField();
             if (egret.nativeRender) {
                 this.$nativeDisplayObject.setBorderColor(value);
             }
@@ -1471,7 +1495,11 @@ namespace egret {
          * @private
          */
         $setBackground(value: boolean): void {
+            if (this.$TextField[sys.TextKeys.background] == value) {
+                return;
+            }
             this.$TextField[sys.TextKeys.background] = value;
+            this.$invalidateTextField();
             if (egret.nativeRender) {
                 this.$nativeDisplayObject.setBackground(value);
             }
@@ -1505,7 +1533,11 @@ namespace egret {
          * @private
          */
         $setBackgroundColor(value: number): void {
+            if (this.$TextField[sys.TextKeys.backgroundColor] == value) {
+                return;
+            }
             this.$TextField[sys.TextKeys.backgroundColor] = value;
+            this.$invalidateTextField();
             if (egret.nativeRender) {
                 this.$nativeDisplayObject.setBackgroundColor(value);
             }
@@ -1644,6 +1676,7 @@ namespace egret {
             let self = this;
             self.$renderDirty = true;
             self.$TextField[sys.TextKeys.textLinesChanged] = true;
+            self.$TextField[sys.TextKeys.textLinesChangedForNativeRender] = true;
             if (egret.nativeRender) {
                 // egret_native.dirtyTextField(this);
             }
@@ -1808,6 +1841,7 @@ namespace egret {
          */
         private setMiddleStyle(textArr: Array<egret.ITextElement>): void {
             this.$TextField[sys.TextKeys.textLinesChanged] = true;
+            this.$TextField[sys.TextKeys.textLinesChangedForNativeRender] = true;
             this.textArr = textArr;
             this.$invalidateTextField();
         }
@@ -1827,7 +1861,7 @@ namespace egret {
         public get textWidth(): number {
             this.$getLinesArr();
             if (nativeRender) {
-                return egret_native.nrGetTextFieldWidth(this.$nativeDisplayObject.id);
+                return egret_native.nrGetTextWidth(this.$nativeDisplayObject.id);
             }
             return this.$TextField[sys.TextKeys.textWidth];
         }
@@ -1847,7 +1881,7 @@ namespace egret {
         public get textHeight(): number {
             this.$getLinesArr();
             if (nativeRender) {
-                return egret_native.nrGetTextFieldHeight(this.$nativeDisplayObject.id);
+                return egret_native.nrGetTextHeight(this.$nativeDisplayObject.id);
             }
             return TextFieldUtils.$getTextHeight(this);
         }
@@ -1875,6 +1909,7 @@ namespace egret {
                 this.textArr.push(element);
                 this.$TextField[sys.TextKeys.text] = text;
                 this.$TextField[sys.TextKeys.textLinesChanged] = true;
+                this.$TextField[sys.TextKeys.textLinesChangedForNativeRender] = true;
                 this.$nativeDisplayObject.setTextFlow(this.textArr);
                 return;
             }
@@ -1895,18 +1930,25 @@ namespace egret {
          */
         private linesArr: Array<egret.ILineElement> = [];
 
+        $getLinesArr(): Array<egret.ILineElement> {
+            let values = this.$TextField;
+            if (nativeRender && values[sys.TextKeys.textLinesChangedForNativeRender]) {
+                egret_native.updateNativeRender();
+                values[sys.TextKeys.textLinesChangedForNativeRender] = false;
+                return;
+            }
+            else {
+                return this.$getLinesArr2();
+            }
+        }
+
         /**
          * @private
          *
          * @returns
          */
-        $getLinesArr(): Array<egret.ILineElement> {
+        $getLinesArr2(): Array<egret.ILineElement> {
             let values = this.$TextField;
-            if (nativeRender && values[sys.TextKeys.textLinesChanged]) {
-                egret_native.updateNativeRender();
-                values[sys.TextKeys.textLinesChanged] = false;
-                return;
-            }
 
             if (!values[sys.TextKeys.textLinesChanged]) {
                 return this.linesArr;

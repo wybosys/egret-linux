@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var path = require("path");
 var minimatch = require('../lib/resourcemanager').minimatch;
-var RenamePlugin = (function () {
+var RenamePlugin = /** @class */ (function () {
     function RenamePlugin(options) {
         this.options = options;
         this.verboseInfo = [];
@@ -62,7 +62,7 @@ var RenamePlugin = (function () {
                         toFilename = match.to.replace('[name]', name).replace('[hash]', hash).replace('[ext]', extname).replace("[path]", p);
                         file.path = file.base + '/' + toFilename;
                         if (this.options.verbose) {
-                            console.log("RenamePlugin: " + file.relative + " => " + toFilename);
+                            console.log("RenamePlugin: " + file.origin + " => " + toFilename);
                         }
                         break;
                     }

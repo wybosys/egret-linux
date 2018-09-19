@@ -204,7 +204,6 @@ namespace egret.web {
                 this.surface.resize(width, height);
                 return;
             }
-
             this.context.pushBuffer(this);
             // render target 尺寸重置
             if (width != this.rootRenderTarget.width || height != this.rootRenderTarget.height) {
@@ -213,14 +212,11 @@ namespace egret.web {
                 this.rootRenderTarget.width = width;
                 this.rootRenderTarget.height = height;
             }
-
             // 如果是舞台的渲染缓冲，执行resize，否则surface大小不随之改变
             if (this.root) {
                 this.context.resize(width, height, useMaxSize);
             }
-
             this.context.clear();
-
             this.context.popBuffer();
         }
 

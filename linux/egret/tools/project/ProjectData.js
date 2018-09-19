@@ -8,7 +8,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var file = require("../lib/FileUtil");
 var _utils = require("../lib/utils");
 var _path = require("path");
-var EgretProjectData = (function () {
+var EgretProjectData = /** @class */ (function () {
     function EgretProjectData() {
         this.egretProperties = {
             modules: [],
@@ -85,22 +85,6 @@ var EgretProjectData = (function () {
         }
         return [];
     };
-    EgretProjectData.prototype.getExmlRoots = function () {
-        if (globals.hasKeys(this.egretProperties, ["eui", "exmlRoot"])) {
-            var result = this.egretProperties.eui.exmlRoot;
-            if (typeof result == "string") {
-                return [_path.join(egret.args.projectDir, result)];
-            }
-            else {
-                var temp = this.egretProperties.eui.exmlRoot;
-                return temp.reduce(function (previousValue, currentValue) {
-                    previousValue.push(_path.join(egret.args.projectDir, currentValue));
-                    return previousValue;
-                }, []);
-            }
-        }
-        return [egret.args.projectDir];
-    };
     EgretProjectData.prototype.getCurrentTarget = function () {
         if (globals.hasKeys(this.egretProperties, ["target", "current"])) {
             return this.egretProperties.target.current;
@@ -108,18 +92,6 @@ var EgretProjectData = (function () {
         else {
             return "web";
         }
-    };
-    EgretProjectData.prototype.getThemes = function () {
-        if (globals.hasKeys(this.egretProperties, ["eui", "themes"])) {
-            return this.egretProperties.eui.themes;
-        }
-        return null;
-    };
-    EgretProjectData.prototype.getExmlPublishPolicy = function () {
-        if (globals.hasKeys(this.egretProperties, ["eui", "exmlPublishPolicy"])) {
-            return this.egretProperties.eui.exmlPublishPolicy;
-        }
-        return "content";
     };
     EgretProjectData.prototype.getCopyExmlList = function () {
         if (globals.hasKeys(this.egretProperties, [egret.args.target, "copyExmlList"])) {
@@ -138,12 +110,18 @@ var EgretProjectData = (function () {
         if (!p) {
             var engineVersion = m.version || this.egretProperties.engineVersion;
             if (engineVersion) {
-                //var versions = exports.launcher.getEgretToolsInstalledByVersion(engineVersion);
-                //return _path.join(versions, 'build', m.name);
+                var versions = exports.launcher.getEgretToolsInstalledByVersion(engineVersion);
+                return _path.join(versions, 'build', m.name);
             }
             return _path.join(egret.root, 'build', m.name);
         }
-        var egretLibs = getAppDataEnginesRootPath();
+        var egretLibs;
+        if (process.platform === 'linux') {
+            egretLibs = _path.resolve(__dirname, '../../');
+        }
+        else {
+            egretLibs = getAppDataEnginesRootPath();
+        }
         var keyword = '${EGRET_APP_DATA}';
         if (p.indexOf(keyword) >= 0) {
             p = p.replace(keyword, egretLibs);
@@ -195,7 +173,7 @@ var EgretProjectData = (function () {
             var sourceDir = _this.getModulePath(m);
             var targetDir = _path.join(_this.getLibraryFolder(), name);
             var relative = _path.relative(_this.getProjectRoot(), sourceDir);
-            if (relative.indexOf("..") == -1 && !_path.isAbsolute(relative)) {
+            if (relative.indexOf("..") == -1 && !_path.isAbsolute(relative)) { // source 在项目中
                 targetDir = sourceDir;
             }
             targetDir = file.escapePath(_path.relative(_this.getProjectRoot(), targetDir)) + _path.sep;
@@ -253,12 +231,12 @@ var EgretProjectData = (function () {
         var content = JSON.stringify(this.egretProperties, null, "\t");
         file.save(egretPropertiesPath, content);
     };
+    __decorate([
+        _utils.cache
+    ], EgretProjectData.prototype, "getModulesConfig", null);
     return EgretProjectData;
 }());
-__decorate([
-    _utils.cache
-], EgretProjectData.prototype, "getModulesConfig", null);
-var EgretLauncherProxy = (function () {
+var EgretLauncherProxy = /** @class */ (function () {
     function EgretLauncherProxy() {
     }
     EgretLauncherProxy.prototype.getMinVersion = function () {
@@ -271,6 +249,9 @@ var EgretLauncherProxy = (function () {
         };
     };
     EgretLauncherProxy.prototype.getEgretToolsInstalledByVersion = function (checkVersion) {
+        if (process.platform === 'linux') {
+            return _path.resolve(__dirname, '../../');
+        }
         var egretjs = this.getLauncherLibrary();
         var data = egretjs.getAllEngineVersions();
         var versions = [];
@@ -320,15 +301,11 @@ function getAppDataPath() {
             var appdata = process.env.AppData || process.env.USERPROFILE + "/AppData/Roaming/";
             result = file.escapePath(appdata);
             break;
-        case 'linux':
-	        var selector = process['mainModule'].filename;
-	        result = file.escapePath(file.joinPath(_path.dirname(_path.dirname(_path.dirname(_path.dirname(_path.dirname(selector))))), './engine/'));
-            break;
         default:
             ;
     }
     if (!file.exists(result)) {
-        throw 'missing appdata path ' + result;
+        throw 'missing appdata path';
     }
     return result;
 }
@@ -343,7 +320,7 @@ function getEgretLauncherPath() {
     var npmEgretPath;
     if (process.platform === 'darwin') {
         var basicPath = '/usr/local';
-        if (!file.existsSync(basicPath)) {
+        if (!file.existsSync(basicPath)) { //some mac doesn't have path '/usr/local'
             basicPath = '/usr';
         }
         npmEgretPath = file.joinPath(basicPath, 'lib/node_modules/egret/EgretEngine');
@@ -357,5 +334,5 @@ function getEgretLauncherPath() {
     var launcherPath = file.joinPath(file.read(npmEgretPath), "../");
     return launcherPath;
 }
-//exports.launcher = new EgretLauncherProxy();
+exports.launcher = new EgretLauncherProxy();
 exports.projectData = new EgretProjectData();

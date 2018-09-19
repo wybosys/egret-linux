@@ -189,9 +189,9 @@ export function open(target, appName?) {
 }
 
 export async function executeCommand(command: string, options = {}) {
-    return new Promise<{ error: Error, stdout: string, stderr: string }>((reslove, reject) => {
+    return new Promise<{ error: Error, stdout: string, stderr: string }>((resolve, reject) => {
         cp.exec(command, options, (error, stdout, stderr) => {
-            reslove({ error, stdout, stderr })
+            resolve({ error, stdout, stderr })
         });
     })
 }
@@ -373,6 +373,22 @@ export function sleep(milesecond: number) {
     });
 }
 
+export function shell2(command: string, args: string[]) {
+    const cmd = command + " " + args.join(" ");
+    return new Promise((resolve, reject) => {
+        var shell = cp.exec(cmd, (error, stdout, stderr) => {
+            if (!error) {
+                resolve();
+            }
+            else {
+                console.log(stderr);
+                reject();
+            }
+        });
+    })
+
+}
+
 export function shell(path: string, args: string[], opt?: cp.ExecOptions, verbase?: boolean) {
     let stdout = "";
     let stderr = "";
@@ -398,7 +414,7 @@ export function shell(path: string, args: string[], opt?: cp.ExecOptions, verbas
 
     type Result = { code: number, stdout: string, stderr: string, path: string, args: any[] };
 
-    return new Promise<Result>((reslove, reject) => {
+    return new Promise<Result>((resolve, reject) => {
         // path = "\"" + path + "\"";
         // var shell = cp.spawn(path + " " + args.join(" "));
         var shell = cp.spawn(path, args);
@@ -415,7 +431,7 @@ export function shell(path: string, args: string[], opt?: cp.ExecOptions, verbas
                 reject({ code, stdout, stderr, path, args });
             }
             else {
-                reslove({ code, stdout, stderr, path, args });
+                resolve({ code, stdout, stderr, path, args });
             }
         });
     });

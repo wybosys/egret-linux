@@ -6664,6 +6664,9 @@ var eui;
          * @language zh_CN
          */
         ListBase.prototype.onRendererTouchBegin = function (event) {
+            if (!this.$stage) {
+                return;
+            }
             var values = this.$ListBase;
             if (event.$isDefaultPrevented)
                 return;
@@ -10991,6 +10994,9 @@ var eui;
          * @language zh_CN
          */
         ItemRenderer.prototype.onTouchBegin = function (event) {
+            if (!this.$stage) {
+                return;
+            }
             this.$stage.addEventListener(egret.TouchEvent.TOUCH_CANCEL, this.onTouchCancle, this);
             this.$stage.addEventListener(egret.TouchEvent.TOUCH_END, this.onStageTouchEnd, this);
             this.touchCaptured = true;
@@ -14371,6 +14377,9 @@ var eui;
          * @param event
          */
         Scroller.prototype.onTouchBeginCapture = function (event) {
+            if (!this.$stage) {
+                return;
+            }
             this.$Scroller[12 /* touchCancle */] = false;
             var canScroll = this.checkScrollPolicy();
             if (!canScroll) {
@@ -16683,7 +16692,7 @@ var eui;
                 if (isEnded && this.endFunction) {
                     this.endFunction.call(this.thisObject, this);
                 }
-                return false;
+                return true;
             };
             return Animation;
         }());
@@ -17819,7 +17828,7 @@ var eui;
          *
          */
         EditableText.prototype.$onRemoveFromStage = function () {
-            eui.sys.UIComponentImpl.prototype["$onRemoveFromStage"].call(this);
+            _super.prototype.$onRemoveFromStage.call(this);
             this.removeEventListener(egret.FocusEvent.FOCUS_IN, this.onfocusIn, this);
             this.removeEventListener(egret.FocusEvent.FOCUS_OUT, this.onfocusOut, this);
         };
@@ -18986,8 +18995,9 @@ var eui;
             }
             var paths = data.paths;
             for (var path in paths) {
-                window[path] = EXML.update(path, paths[path]);
+                EXML.update(path, paths[path]);
             }
+            //commonjs|commonjs2
             if (!data.exmls || data.exmls.length == 0) {
                 this.onLoaded();
             }
@@ -21233,13 +21243,16 @@ var EXML;
      */
     function $parseURLContent(url, text) {
         var clazz = null;
-        if (text) {
+        if (text && typeof (text) == "string") {
             try {
                 clazz = parse(text);
             }
             catch (e) {
                 console.error(url + "\n" + e.message);
             }
+        }
+        if (text && text["prototype"]) {
+            clazz = text;
         }
         if (url) {
             if (clazz) {

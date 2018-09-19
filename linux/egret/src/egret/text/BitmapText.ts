@@ -92,6 +92,18 @@ namespace egret {
                 return;
             }
             self.$smoothing = value;
+            if (!egret.nativeRender) {
+                let p = self.$parent;
+                if (p && !p.$cacheDirty) {
+                    p.$cacheDirty = true;
+                    p.$cacheDirtyUp();
+                }
+                let maskedObject = self.$maskedObject;
+                if (maskedObject && !maskedObject.$cacheDirty) {
+                    maskedObject.$cacheDirty = true;
+                    maskedObject.$cacheDirtyUp();
+                }
+            }
         }
 
         private $text: string = "";
@@ -122,6 +134,8 @@ namespace egret {
         $setText(value: string): boolean {
             if (value == null) {
                 value = "";
+            } else {
+                value = String(value);
             }
             let self = this;
             if (value == self.$text)
@@ -388,6 +402,11 @@ namespace egret {
             let textLines: string[] = this.$getTextLines();
             let length: number = textLines.length;
             if (length == 0) {
+                if (egret.nativeRender && self.$font) {
+                    self.$nativeDisplayObject.setDataToBitmapNode(self.$nativeDisplayObject.id, self.$font.$texture, []);
+                    self.$nativeDisplayObject.setWidth(0);
+                    self.$nativeDisplayObject.setHeight(0);
+                }
                 return;
             }
             let drawArr = [];

@@ -13,12 +13,16 @@ var texturemerger_1 = require("./texturemerger");
 exports.TextureMergerPlugin = texturemerger_1.TextureMergerPlugin;
 var resConfig_1 = require("./resConfig");
 exports.EmitResConfigFilePlugin = resConfig_1.EmitResConfigFilePlugin;
+exports.ConvertResConfigFilePlugin = resConfig_1.ConvertResConfigFilePlugin;
 var clean_1 = require("./clean");
 exports.CleanPlugin = clean_1.CleanPlugin;
 var rename_1 = require("./rename");
 exports.RenamePlugin = rename_1.RenamePlugin;
 var resSplit_1 = require("./resSplit");
 exports.ResSplitPlugin = resSplit_1.ResSplitPlugin;
+var merge_1 = require("./merge");
+exports.ZipPlugin = merge_1.ZipPlugin;
+exports.MergeEuiJsonPlugin = merge_1.MergeEuiJsonPlugin;
 function run() {
     global.exitCode = 0;
 }

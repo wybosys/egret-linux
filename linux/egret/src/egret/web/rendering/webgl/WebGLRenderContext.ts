@@ -141,7 +141,7 @@ namespace egret.web {
         /**
          * 启用RenderBuffer
          */
-        private activateBuffer(buffer: WebGLRenderBuffer): void {
+        private activateBuffer(buffer: WebGLRenderBuffer, width:number, height:number): void {
 
             buffer.rootRenderTarget.activate();
 
@@ -153,7 +153,7 @@ namespace egret.web {
 
             buffer.restoreScissor();
 
-            this.onResize(buffer.width, buffer.height);
+            this.onResize(width, height);
         }
 
         /**
@@ -182,7 +182,7 @@ namespace egret.web {
 
             this.surface = createCanvas(width, height);
 
-            if(egret.nativeRender) {
+            if (egret.nativeRender) {
                 return;
             }
 
@@ -413,8 +413,10 @@ namespace egret.web {
                 if (bitmapData.$deleteSource && bitmapData.webGLTexture) {
                     bitmapData.source = null;
                 }
-                //todo 默认值
-                bitmapData.webGLTexture["smoothing"] = true;
+                if (bitmapData.webGLTexture) {
+                    //todo 默认值
+                    bitmapData.webGLTexture["smoothing"] = true;
+                }
             }
             return bitmapData.webGLTexture;
         }
@@ -582,7 +584,7 @@ namespace egret.web {
 
             let count = meshIndices ? meshIndices.length / 3 : 2;
             // 应用$filter，因为只可能是colorMatrixFilter，最后两个参数可不传
-            this.drawCmdManager.pushDrawTexture(texture, count, this.$filter,textureWidth,textureHeight);
+            this.drawCmdManager.pushDrawTexture(texture, count, this.$filter, textureWidth, textureHeight);
 
             this.vao.cacheArrays(buffer, sourceX, sourceY, sourceWidth, sourceHeight,
                 destX, destY, destWidth, destHeight, textureWidth, textureHeight,
@@ -610,12 +612,12 @@ namespace egret.web {
         /**
          * 绘制遮罩
          */
-        public pushMask(x:number, y:number, width:number, height:number): void {
+        public pushMask(x: number, y: number, width: number, height: number): void {
             let buffer = this.currentBuffer;
             if (this.contextLost || !buffer) {
                 return;
             }
-            buffer.$stencilList.push({x,y,width,height});
+            buffer.$stencilList.push({ x, y, width, height });
             if (this.vao.reachMaxSize()) {
                 this.$drawWebGL();
             }
@@ -784,7 +786,7 @@ namespace egret.web {
                     }
                     break;
                 case DRAWABLE_TYPE.ACT_BUFFER:
-                    this.activateBuffer(data.buffer);
+                    this.activateBuffer(data.buffer, data.width, data.height);
                     break;
                 case DRAWABLE_TYPE.ENABLE_SCISSOR:
                     let buffer = this.activatedBuffer;

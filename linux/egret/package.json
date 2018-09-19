@@ -1,6 +1,6 @@
 {
   "name": "egret",
-  "version": "5.1.8",
+  "version": "5.2.9",
   "private": true,
   "author": "egret-labs",
   "bin": {
@@ -243,7 +243,17 @@
         "description": "Facebook Instant Games SDK",
         "description_en": "Facebook Instant Games SDK",
         "files": [],
-        "root": "build/egret-facebook",
+        "root": "",
+        "dependencies": [
+          "egret"
+        ]
+      },
+      {
+        "name": "egretia-sdk",
+        "description": "Egretia SDK",
+        "description_en": "Egretia SDK",
+        "files": [],
+        "root": "",
         "dependencies": [
           "egret"
         ]

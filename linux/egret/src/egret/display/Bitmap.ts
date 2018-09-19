@@ -348,7 +348,6 @@ namespace egret {
          * @default <code>BitmapFillMode.SCALE</code>
          *
          * @version Egret 2.4
-         * @version eui 1.0
          * @platform Web
          * @language en_US
          */
@@ -360,7 +359,6 @@ namespace egret {
          * @default <code>BitmapFillMode.SCALE</code>
          *
          * @version Egret 2.4
-         * @version eui 1.0
          * @platform Web
          * @language zh_CN
          */
@@ -373,13 +371,27 @@ namespace egret {
         }
 
         $setFillMode(value: string): boolean {
-            if (value == this.$fillMode) {
+            const self = this;
+            if (value == self.$fillMode) {
                 return false;
             }
-            this.$fillMode = value;
+            self.$fillMode = value;
 
             if (egret.nativeRender) {
-                this.$nativeDisplayObject.setBitmapFillMode(this.$fillMode);
+                self.$nativeDisplayObject.setBitmapFillMode(self.$fillMode);
+            }
+            else {
+                self.$renderDirty = true;
+                let p = self.$parent;
+                if (p && !p.$cacheDirty) {
+                    p.$cacheDirty = true;
+                    p.$cacheDirtyUp();
+                }
+                let maskedObject = self.$maskedObject;
+                if (maskedObject && !maskedObject.$cacheDirty) {
+                    maskedObject.$cacheDirty = true;
+                    maskedObject.$cacheDirtyUp();
+                }
             }
 
             return true;
@@ -420,11 +432,24 @@ namespace egret {
         }
 
         public set smoothing(value: boolean) {
+            let self = this;
             if (value == this.$smoothing) {
                 return;
             }
             this.$smoothing = value;
             (<sys.BitmapNode>this.$renderNode).smoothing = value;
+            if (!egret.nativeRender) {
+                let p = self.$parent;
+                if (p && !p.$cacheDirty) {
+                    p.$cacheDirty = true;
+                    p.$cacheDirtyUp();
+                }
+                let maskedObject = self.$maskedObject;
+                if (maskedObject && !maskedObject.$cacheDirty) {
+                    maskedObject.$cacheDirty = true;
+                    maskedObject.$cacheDirtyUp();
+                }
+            }
         }
 
         /**
