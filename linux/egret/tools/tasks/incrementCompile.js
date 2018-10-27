@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var service = require("../service/index");
-var IncrementCompilePlugin = (function () {
+var IncrementCompilePlugin = /** @class */ (function () {
     function IncrementCompilePlugin() {
     }
     IncrementCompilePlugin.prototype.onFile = function (file) {
@@ -62,6 +62,11 @@ var IncrementCompilePlugin = (function () {
 exports.IncrementCompilePlugin = IncrementCompilePlugin;
 function executeBuildCommand() {
     return new Promise(function (resolve, reject) {
+        // console.log("1   executeBuildCommand", {
+        //     path: egret.args.projectDir,
+        //     command: "build",
+        //     option: egret.args
+        // });
         service.client.execCommand({
             path: egret.args.projectDir,
             command: "build",

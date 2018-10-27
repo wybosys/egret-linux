@@ -39,12 +39,15 @@ var manifest = {
     initial: [],
     game: [],
 };
-var ManifestPlugin = (function () {
+var ManifestPlugin = /** @class */ (function () {
     function ManifestPlugin(options) {
         this.options = options;
         this.verboseInfo = [];
         if (!this.options) {
             this.options = { output: "manifest.json" };
+        }
+        if (options.hash) {
+            console.log('ManifestPlugin 在未来的 5.3.x 版本中将不再支持 hash 参数，请使用 RenamePlugin 代替');
         }
     }
     ManifestPlugin.prototype.onFile = function (file) {
@@ -53,14 +56,6 @@ var ManifestPlugin = (function () {
             return __generator(this, function (_a) {
                 filename = file.relative;
                 extname = path.extname(filename);
-                // if (filename === "config.res.js") {
-                //     const crc32 = globals.getCrc32();
-                //     const crc32_file_path = crc32(file.contents);
-                //     const origin_path = file.original_relative;
-                //     const new_file_path = "js/" + origin_path.substr(0, origin_path.length - file.extname.length) + "_" + crc32_file_path + file.extname;
-                //     file.path = path.join(file.base, new_file_path);
-                //     manifest.configURL = new_file_path;
-                // }
                 if (extname == ".js") {
                     new_file_path = void 0;
                     basename = path.basename(filename);
@@ -72,6 +67,7 @@ var ManifestPlugin = (function () {
                     else {
                         new_file_path = "js/" + basename.substr(0, basename.length - file.extname.length) + file.extname;
                     }
+                    file.outputDir = "";
                     file.path = path.join(file.base, new_file_path);
                     relative = file.relative.split("\\").join('/');
                     if (file.origin.indexOf('libs/') >= 0) {

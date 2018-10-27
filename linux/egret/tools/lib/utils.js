@@ -237,9 +237,9 @@ function executeCommand(command, options) {
     if (options === void 0) { options = {}; }
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            return [2 /*return*/, new Promise(function (reslove, reject) {
+            return [2 /*return*/, new Promise(function (resolve, reject) {
                     cp.exec(command, options, function (error, stdout, stderr) {
-                        reslove({ error: error, stdout: stdout, stderr: stderr });
+                        resolve({ error: error, stdout: stdout, stderr: stderr });
                     });
                 })];
         });
@@ -341,7 +341,7 @@ function getAvailablePort(port) {
                 port++;
                 getPort();
             });
-            server.listen(port, '0.0.0.0');
+            server.listen(port);
         }
         getPort();
     });
@@ -403,6 +403,21 @@ function sleep(milesecond) {
     });
 }
 exports.sleep = sleep;
+function shell2(command, args) {
+    var cmd = command + " " + args.join(" ");
+    return new Promise(function (resolve, reject) {
+        var shell = cp.exec(cmd, function (error, stdout, stderr) {
+            if (!error) {
+                resolve();
+            }
+            else {
+                console.log(stderr);
+                reject();
+            }
+        });
+    });
+}
+exports.shell2 = shell2;
 function shell(path, args, opt, verbase) {
     var stdout = "";
     var stderr = "";
@@ -424,7 +439,7 @@ function shell(path, args, opt, verbase) {
             console.log(str);
         }
     };
-    return new Promise(function (reslove, reject) {
+    return new Promise(function (resolve, reject) {
         // path = "\"" + path + "\"";
         // var shell = cp.spawn(path + " " + args.join(" "));
         var shell = cp.spawn(path, args);
@@ -441,14 +456,14 @@ function shell(path, args, opt, verbase) {
                 reject({ code: code, stdout: stdout, stderr: stderr, path: path, args: args });
             }
             else {
-                reslove({ code: code, stdout: stdout, stderr: stderr, path: path, args: args });
+                resolve({ code: code, stdout: stdout, stderr: stderr, path: path, args: args });
             }
         });
     });
 }
 exports.shell = shell;
 ;
-var CliException = (function (_super) {
+var CliException = /** @class */ (function (_super) {
     __extends(CliException, _super);
     function CliException(errorId, param) {
         var _this = _super.call(this) || this;

@@ -124,23 +124,6 @@ class EgretProjectData {
         return [];
     }
 
-    getExmlRoots(): string[] {
-        if (globals.hasKeys(this.egretProperties, ["eui", "exmlRoot"])) {
-            let result = this.egretProperties.eui.exmlRoot;
-            if (typeof result == "string") {
-                return [_path.join(egret.args.projectDir, result)];
-            }
-            else {
-                let temp: string[] = <string[]>this.egretProperties.eui.exmlRoot;
-                return temp.reduce(function (previousValue: string[], currentValue: string) {
-                    previousValue.push(_path.join(egret.args.projectDir, currentValue));
-                    return previousValue;
-                }, []);
-            }
-        }
-        return [egret.args.projectDir];
-    }
-
     getCurrentTarget() {
         if (globals.hasKeys(this.egretProperties, ["target", "current"])) {
             return this.egretProperties.target.current;
@@ -148,20 +131,6 @@ class EgretProjectData {
         else {
             return "web"
         }
-    }
-
-    getThemes(): string[] {
-        if (globals.hasKeys(this.egretProperties, ["eui", "themes"])) {
-            return this.egretProperties.eui.themes;
-        }
-        return null;
-    }
-
-    getExmlPublishPolicy(): string {
-        if (globals.hasKeys(this.egretProperties, ["eui", "exmlPublishPolicy"])) {
-            return this.egretProperties.eui.exmlPublishPolicy;
-        }
-        return "content";
     }
 
     getCopyExmlList(): Array<string> {
@@ -189,7 +158,12 @@ class EgretProjectData {
             }
             return _path.join(egret.root, 'build', m.name);
         }
-        let egretLibs = getAppDataEnginesRootPath();
+        let egretLibs;
+        if (process.platform === 'linux') {
+            egretLibs = _path.resolve(__dirname, '../../');
+        } else {
+            egretLibs = getAppDataEnginesRootPath();
+        }
         let keyword = '${EGRET_APP_DATA}';
         if (p.indexOf(keyword) >= 0) {
             p = p.replace(keyword, egretLibs);
@@ -343,6 +317,9 @@ class EgretLauncherProxy {
     private proxy: LauncherAPI;
 
     getEgretToolsInstalledByVersion(checkVersion: string) {
+        if (process.platform === 'linux') {
+            return _path.resolve(__dirname, '../../');
+        }
         const egretjs = this.getLauncherLibrary();
         const data = egretjs.getAllEngineVersions() as any[];
         const versions: { version: string, path: string }[] = [];

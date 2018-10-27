@@ -48,22 +48,20 @@ var Build = require("./build");
 var Server = require("../server/server");
 var FileUtil = require("../lib/FileUtil");
 var service = require("../service/index");
-var project_1 = require("../project");
 var os = require("os");
-var Run = (function () {
+var Run = /** @class */ (function () {
     function Run() {
         this.initVersion = ""; //初始化的 egret 版本，如果版本变化了，关掉当前的进程
     }
     Run.prototype.execute = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var exitCode, target, toolsList, _a, port;
+            var exitCode, target, _a, port;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, new Build().execute()];
                     case 1:
                         exitCode = _b.sent();
                         target = egret.args.target;
-                        toolsList = project_1.launcher.getLauncherLibrary().getInstalledTools();
                         _a = target;
                         switch (_a) {
                             case "web": return [3 /*break*/, 2];
@@ -125,18 +123,9 @@ var Run = (function () {
                 .on("removed", function (f) { return _this.sendBuildCMD(f, "removed"); })
                 .on("changed", function (f) { return _this.sendBuildCMD(f, "modified"); });
         });
-        /*//监听build文件夹的变化
-        watch.createMonitor(path.join(egret.root,'build'), { persistent: true, interval: 2007, filter: function (f, stat) {
-            return true;
-        } }, function (m) {
-            m.on("created", (f) => this.shutDown(f, "added"))
-                .on("removed", (f) => this.shutDown(f, "removed"))
-                .on("changed", (f) => this.shutDown(f, "modified"));
-        });*/
         watch.createMonitor(path.dirname(dir), {
             persistent: true, interval: 2007, filter: function (f, stat) {
-                if (path.basename(f) == "egretProperties.json") {
-                    _this.initVersion = _this.getVersion(f);
+                if (path.basename(f) == "egretProperties.json" || path.basename(f) == "tsconfig.json") {
                     return true;
                 }
                 else {
@@ -150,24 +139,12 @@ var Run = (function () {
         });
     };
     Run.prototype.shutDown = function (file, type) {
-        file = FileUtil.escapePath(file);
-        var isShutdown = false;
-        if (path.basename(file) == 'egretProperties.json') {
-            var nowVersion = this.getVersion(file);
-            if (this.initVersion != nowVersion) {
-                isShutdown = true;
-            }
-        }
-        else {
-            isShutdown = true;
-        }
-        if (isShutdown) {
-            service.client.execCommand({
-                path: egret.args.projectDir,
-                command: "shutdown",
-                option: egret.args
-            }, function () { return process.exit(0); }, true);
-        }
+        globals.log(10022, file);
+        service.client.execCommand({
+            path: egret.args.projectDir,
+            command: "shutdown",
+            option: egret.args
+        }, function () { return process.exit(0); }, true);
     };
     Run.prototype.sendBuildCMD = function (file, type) {
         file = FileUtil.escapePath(file);
@@ -181,11 +158,6 @@ var Run = (function () {
                 cmd.messages.forEach(function (m) { return console.log(m); });
             }
         });
-    };
-    Run.prototype.getVersion = function (filePath) {
-        var jsstr = FileUtil.read(filePath);
-        var js = JSON.parse(jsstr);
-        return js["egret_version"];
     };
     Run.prototype.wrapByParams = function (url) {
         return url + this.genParams();
@@ -208,16 +180,16 @@ var Run = (function () {
         }
         return result;
     };
+    __decorate([
+        utils.cache
+    ], Run.prototype, "genParams", null);
     return Run;
 }());
-__decorate([
-    utils.cache
-], Run.prototype, "genParams", null);
 function runWxIde() {
     return __awaiter(this, void 0, void 0, function () {
-        var wxPaths, packagePath, _a, result, stdout_1, iconv, encoding, binaryEncoding, result2, stdout, stdoutArr, exePath, packageJson, _b, _c, _d, wxpath, projectPath, result, e_1;
-        return __generator(this, function (_e) {
-            switch (_e.label) {
+        var wxPaths, _a, result, stdout_1, iconv, encoding, binaryEncoding, result2, stdout, stdoutArr, exePath, wxpath, projectPath, e_1;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     wxPaths = [];
                     _a = os.platform();
@@ -228,14 +200,13 @@ function runWxIde() {
                     return [3 /*break*/, 5];
                 case 1: return [4 /*yield*/, utils.executeCommand("defaults read com.tencent.wechat.devtools LastRunAppBundlePath")];
                 case 2:
-                    result = _e.sent();
+                    result = _b.sent();
                     if (result.stdout != '') {
                         stdout_1 = result.stdout.replace(/\n/g, "");
                         wxPaths = [FileUtil.joinPath(stdout_1, "/Contents/Resources/app.nw/bin/cli")];
                     }
                     // defaults read
                     wxPaths.push("/Applications/wechatwebdevtools.app/Contents/Resources/app.nw/bin/cli");
-                    packagePath = "/Applications/wechatwebdevtools.app/Contents/Resources/app.nw/package.json";
                     return [3 /*break*/, 5];
                 case 3:
                     // defaults read
@@ -248,7 +219,7 @@ function runWxIde() {
                     binaryEncoding = 'binary';
                     return [4 /*yield*/, utils.executeCommand('REG QUERY "HKLM\\SOFTWARE\\Wow6432Node\\Tencent\\微信web开发者工具"', { encoding: binaryEncoding })];
                 case 4:
-                    result2 = _e.sent();
+                    result2 = _b.sent();
                     stdout = iconv.decode(new Buffer(result2.stdout, binaryEncoding), encoding);
                     if (stdout != '') {
                         stdoutArr = stdout.split("\r\n");
@@ -256,47 +227,29 @@ function runWxIde() {
                         exePath = exePath.split("  ").find(function (path) { return path.indexOf(".exe") != -1; });
                         exePath = path.join(path.dirname(exePath), 'cli.bat');
                         wxPaths.unshift(exePath);
-                        packagePath = path.resolve(exePath, "../package.nw/package.json");
                     }
                     return [3 /*break*/, 5];
                 case 5:
-                    if (!(!!packagePath)) return [3 /*break*/, 7];
-                    _d = (_c = JSON).parse;
-                    return [4 /*yield*/, FileUtil.readFileAsync(packagePath, null)];
-                case 6:
-                    _b = _d.apply(_c, [_e.sent()]);
-                    return [3 /*break*/, 8];
-                case 7:
-                    _b = null;
-                    _e.label = 8;
-                case 8:
-                    packageJson = _b;
                     wxpath = wxPaths.find(function (wxpath) { return FileUtil.exists(wxpath); });
-                    if (!wxpath) return [3 /*break*/, 16];
+                    if (!wxpath) return [3 /*break*/, 11];
                     projectPath = egret.args.projectDir;
                     projectPath = path.resolve(projectPath, "../", path.basename(projectPath) + "_wxgame");
-                    _e.label = 9;
-                case 9:
-                    _e.trys.push([9, 14, , 15]);
-                    result = globals.compressVersion(packageJson.version, "1.02.1801081");
-                    if (!(result > 0)) return [3 /*break*/, 11];
+                    _b.label = 6;
+                case 6:
+                    _b.trys.push([6, 8, , 10]);
                     return [4 /*yield*/, utils.shell(wxpath, ["-o", projectPath, "-f", "egret"], null, true)];
-                case 10:
-                    _e.sent();
-                    return [3 /*break*/, 13];
-                case 11:
-                    console.log("当前web开发者工具版本为:", packageJson.version, ", 请升级最新的微信web开发者工具");
+                case 7:
+                    _b.sent();
+                    return [3 /*break*/, 10];
+                case 8:
+                    e_1 = _b.sent();
                     return [4 /*yield*/, utils.shell(wxpath, ["-o", projectPath], null, true)];
-                case 12:
-                    _e.sent();
-                    _e.label = 13;
-                case 13: return [3 /*break*/, 15];
-                case 14:
-                    e_1 = _e.sent();
-                    return [2 /*return*/, 1];
-                case 15: return [3 /*break*/, 17];
-                case 16: throw '请安装最新微信开发者工具';
-                case 17: return [2 /*return*/, DontExitCode];
+                case 9:
+                    _b.sent();
+                    return [3 /*break*/, 10];
+                case 10: return [3 /*break*/, 12];
+                case 11: throw '请安装最新微信开发者工具';
+                case 12: return [2 /*return*/, DontExitCode];
             }
         });
     });

@@ -3,7 +3,7 @@ var Compiler_1 = require("../actions/Compiler");
 var FileUtil = require("../lib/FileUtil");
 var path = require("path");
 var ANY = 'any';
-var CompileEgretEngine = (function () {
+var CompileEgretEngine = /** @class */ (function () {
     function CompileEgretEngine() {
     }
     CompileEgretEngine.prototype.execute = function () {
@@ -21,6 +21,7 @@ var CompileEgretEngine = (function () {
             { name: "release", minify: true }
         ];
         var excludeList = [
+            FileUtil.escapePath(path.join(outputDir, "egretia-sdk")),
             FileUtil.escapePath(path.join(outputDir, "egret-facebook")),
             FileUtil.escapePath(path.join(outputDir, "promise")),
             FileUtil.escapePath(path.join(outputDir, "resourcemanager")),

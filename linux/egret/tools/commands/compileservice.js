@@ -7,7 +7,7 @@ var CompileProject = require("../actions/CompileProject");
 var parser = require("../parser/Parser");
 var EgretProject = require("../project");
 var EngineData_1 = require("../EngineData");
-var AutoCompileCommand = (function () {
+var AutoCompileCommand = /** @class */ (function () {
     function AutoCompileCommand() {
         this.exitCode = [0, 0];
         this.messages = [[], [], [], []];
@@ -117,7 +117,7 @@ var AutoCompileCommand = (function () {
             var fileName;
             for (var i = 0, len = others.length; i < len; i++) {
                 fileName = others[i].fileName;
-                if (fileName.indexOf("tsconfig.json") > -1) {
+                if (fileName.indexOf("tsconfig.json") > -1) { //console.log("tsconfig 改变，重新编译项目");
                     this.compileProject.compileProject(egret.args);
                     this.messages[2] = egret.args.tsconfigError;
                 }
@@ -236,10 +236,12 @@ var AutoCompileCommand = (function () {
     AutoCompileCommand.prototype.onServiceMessage = function (msg) {
         switch (msg.command) {
             case "build":
+                // console.log("5  compileservice onServiceMessage", msg);
                 if (msg.option) {
                     this.sourceMapStateChanged = msg.option.sourceMap != egret.args.sourceMap;
                     egret.args = parser.parseJSON(msg.option);
                 }
+                // console.log("6  compileservice onServiceMessage", msg);
                 this.buildChanges(msg.changes);
                 break;
             case "shutdown":

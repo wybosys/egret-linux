@@ -74,6 +74,7 @@ module egret {
     locale_strings[1121] = "您的模块 package.json 中不包含 typings 属性，这会导致导出的模块不存在 TypeScript Definition 文件 ( .d.ts )，近而无法在 TypeScript 中包含智能语法提示"
     locale_strings[1122] = "第三方库的 tsconfig.json 中必须包含 outFile 这一属性";
     locale_strings[1123] = "{0} 将被调整为'{1}'";
+    locale_strings[1124] = "第三方库形式的egret项目不支持outDir生成规则";
     //compile
     locale_strings[1301] = "在编译路径 {0} 下找不到 egret_file_list.js 或 game_file_list.js，请检查编译路径是否正确";
     locale_strings[1302] = "请输入编译路径。例:{color_green}egret compile --source [your_typescript_source_dir] --output [your_output_dir]{color_normal}";
@@ -107,6 +108,16 @@ module egret {
     locale_strings[1419] = "转换WebP格式 : {0} / {1}";
     locale_strings[1420] = "打包失败，请检查路径中是否有中文或特殊的字符";
     locale_strings[1421] = "打zip包出现异常！";
+    locale_strings[1422] = "合图插件运行后，{0}中存在对上级{1}的引用！";
+    locale_strings[1423] = "TextureMerger 执行错误，错误码:{0}";
+    locale_strings[1424] = "执行命令:{0}{1}";
+    locale_strings[1425] = "{0}所对应的textureMerger项目没有设置后缀名，已自动添加，请检查代码";
+    locale_strings[1426] = "请安装 Texture Merger";
+    locale_strings[1427] = "请将 Texture Merger 升级至 1.7.0 以上版本";
+    locale_strings[1428] = "不支持的平台";
+    locale_strings[1429] = "{0}引入了一个相同的TextureMerger合图结果，请检查";
+    locale_strings[1430] = "配置的fileName不存在资源";
+   
     //run
     locale_strings[1501] = "无法启动服务器，请检查权限或端口是否被占用";
     //create_app
@@ -181,7 +192,7 @@ module egret {
     locale_strings[2020] = "{0}: error 在w:Declarations内的子节点，不允许使用includeIn和excludeFrom属性\n{1}";
     locale_strings[2102] = "{0}: warning 在属性节点上找不到任何子节点\n{1}";
     locale_strings[2103] = "{0}: warning 节点上的同一个属性'{1}'被多次赋值\n{2}";
-
+    locale_strings[2104] = "warning: {0}文件所定义的类名{1}存在重复定义"
     // android sdk install
     locale_strings[2201] = "{0}个文件需要下载！";
     locale_strings[2202] = "文件总大小为{0}MB";
@@ -230,6 +241,8 @@ module egret {
     locale_strings[10019] = "没有找到打包 App 所需要的项目文件，这些文件没有包含在 Github 中，请前往 http://www.egret.com 下载 Egret 安装包，如果您已经安装 Egret 安装包，请联系我们的工作人员";
     locale_strings[10020] = "编译服务异常退出";
     locale_strings[10021] = "文件夹操作出现问题，请注意以下事项:\n1、请查看 template/runtime/native_require.js 是否为空，若为空请重新创建一个新的项目并将文件替换掉。\n2、不要在桌面创建native工程，都放到同一个其他盘去，比如 e 盘。\n由于操作系统刷新问题，请勿在操作文件后立马执行脚本。请重新执行命令，如果多次重试还不能解决，请联系我们，QQ群：{color_green}481169576{color_normal}";
+    locale_strings[10022] = "{0}文件发生变化，自动编译关闭";
+
 
     locale_strings[12000] = "创建一个全新的 Egret 项目";
     locale_strings[12001] = "选择一个项目模板";

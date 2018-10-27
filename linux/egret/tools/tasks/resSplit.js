@@ -35,14 +35,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var minimatch = require('../lib/resourcemanager').minimatch;
-var ResSplitPlugin = (function () {
+var ResSplitPlugin = /** @class */ (function () {
     function ResSplitPlugin(options) {
         this.options = options;
         this.verboseInfo = [];
-        // matchers: [
-        //     { from: "**/*.js", to: "js/[name]_[hash].js" },
-        //     { from: "resource/**/**", to: "[path][name]_[hash].[ext]" }
-        // ]
         if (!this.options) {
             this.options = { matchers: [] };
         }

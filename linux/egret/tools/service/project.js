@@ -3,7 +3,7 @@ var os = require("os");
 var cprocess = require("child_process");
 var utils = require("../lib/utils");
 var FileUtil = require("../lib/FileUtil");
-var Project = (function () {
+var Project = /** @class */ (function () {
     function Project() {
         this.buildProcessOutputs = [];
     }
@@ -28,6 +28,7 @@ var Project = (function () {
     Project.prototype.fileChanged = function (socket, task, path, changeType) {
         var _this = this;
         //console.log("--project.fileChanged--")
+        // console.log("4  Project fileChanged", task);
         if (this.pendingRequest)
             this.pendingRequest.end({ command: "build", exitCode: 0 });
         this.pendingRequest = socket;

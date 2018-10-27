@@ -86,7 +86,11 @@ export class EXClass extends CodeBase {
      * 类名,不包括模块名
      */
     public className: string = "";
-
+    /**
+      * @private
+      * 全名包括模块名
+      */
+    public allName: string = "";
     /**
      * @private
      * 父类类名,包括完整模块名
@@ -178,7 +182,7 @@ export class EXClass extends CodeBase {
      *
      * @returns
      */
-    public toCode(): string {
+    public toCode(isAssignWindow = false): string {
 
         let indent = this.indent;
         let indentStr = this.getIndent(indent);
@@ -200,7 +204,12 @@ export class EXClass extends CodeBase {
         for (let i = 0; i < length; i++) {
             let clazz = innerClasses[i];
             clazz.indent = indent + 1;
-            returnStr += indent1Str + "var " + clazz.className + " = " + clazz.toCode() + "\n\n";
+            if (!isAssignWindow)
+                returnStr += indent1Str + "var " + clazz.className + " = " + clazz.toCode() + "\n\n";
+            else {
+                returnStr += indent1Str + "var " + clazz.className + " = " + clazz.toCode() + "\n";
+                returnStr += indent1Str + `window.${clazz.allName}=${clazz.className};\n`;
+            }
         }
 
         returnStr += indent1Str + "function " + this.className + "() {\n";
@@ -784,7 +793,7 @@ export class EXBinding extends CodeBase {
         let expression = this.templates.join(",");
         let chain = this.chainIndex.join(",");
         return BINDING_PROPERTIES + "(this, [" + expression + "]," + "[" + chain + "]," +
-            this.target + ",\"" + this.property + "\")";
+            this.target + ",\"" + this.property + "\");";
 
     }
 }
