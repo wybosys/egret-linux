@@ -47,7 +47,8 @@ class UpgradeCommand implements egret.Command {
         let upgradeConfigArr: VersionInfo[] = [
             { "v": "5.1.1", command: Upgrade_5_1_1 },
             { "v": "5.1.2", command: Upgrade_5_1_2 },
-            { "v": "5.2.12" }
+            { "v": "5.2.13", command: Upgrade_5_2_13 },
+            { "v": "5.2.17", command: Upgrade_5_2_17 }
         ];
 
         try {
@@ -148,4 +149,21 @@ class Upgrade_5_1_2 {
     }
 }
 
+class Upgrade_5_2_13 {
+
+    async execute() {
+        file.copyAsync(path.join(egret.root, "tools", "templates", "empty", "scripts", "baidugame"), path.join(egret.args.projectDir, "scripts", "baidugame"));
+        file.copyAsync(path.join(egret.root, "tools", "templates", "empty", "scripts", "config.baidugame.ts"), path.join(egret.args.projectDir, "scripts", "config.baidugame.ts"));
+        return 0;
+    }
+}
+
+class Upgrade_5_2_17 {
+
+    async execute() {
+        file.copyAsync(path.join(egret.root, "tools", "templates", "empty", "scripts", "qgame"), path.join(egret.args.projectDir, "scripts", "qgame"));
+        file.copyAsync(path.join(egret.root, "tools", "templates", "empty", "scripts", "config.qgame.ts"), path.join(egret.args.projectDir, "scripts", "config.qgame.ts"));
+        return 0;
+    }
+}
 export = UpgradeCommand;
