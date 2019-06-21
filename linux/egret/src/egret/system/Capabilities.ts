@@ -126,7 +126,19 @@ namespace egret {
          * @language zh_CN
          */
         export const QGAME = "qgame";
+        /**
+         * 运行在 Oppo 小游戏上
+         * @version Egret 5.2.14
+         * @platform All
+         * @language zh_CN
+         */
+        export const OPPOGAME = "oppogame";
 
+    }
+
+    export interface SupportedCompressedTexture {
+        pvrtc: boolean;
+        etc1: boolean;
     }
 
     /**
@@ -259,7 +271,7 @@ namespace egret {
          * @platform Web,Native
          * @language zh_CN
          */
-        public static readonly engineVersion:string = "5.2.17";
+        public static readonly engineVersion: string = "5.2.21";
 
         /***
          * current render mode.
@@ -312,5 +324,19 @@ namespace egret {
          * @language zh_CN
          */
         static readonly boundingClientHeight: number = 0;
+
+        /***
+         * supported compressed texture
+         * @version Egret 5.2.19
+         * @platform Web,Native
+         * @language en_US
+         */
+        /***
+         * supported compressed texture
+         * @version Egret 5.2.19
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        static supportedCompressedTexture: SupportedCompressedTexture;
     }
 }
